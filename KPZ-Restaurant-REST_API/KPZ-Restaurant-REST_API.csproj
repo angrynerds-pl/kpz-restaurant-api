@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>KPZ_Restaurant_API</RootNamespace>
+    <RootNamespace>KPZ_Restaurant_REST_API</RootNamespace>
   </PropertyGroup>
 
 

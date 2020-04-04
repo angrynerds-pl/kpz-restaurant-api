@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace KPZ_Restaurant_API
+namespace KPZ_Restaurant_REST_API
 {
     public class Program
     {
