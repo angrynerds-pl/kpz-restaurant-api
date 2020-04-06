@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KPZ_Restaurant_REST_API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace KPZ_Restaurant_REST_API
 {
@@ -20,11 +22,25 @@ namespace KPZ_Restaurant_REST_API
             Configuration = configuration;
         }
 
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var server = Configuration["DBServer"] ?? "localhost";
+            var port = Configuration["DBPort"] ?? "1433";
+            var user = Configuration["DBUser"] ?? "SA";//"resLogin";
+            var password = Configuration["DBPassword"] ?? "kpz-restaurant-passw0rd";//"kpz-passw0rd";
+            var database = Configuration["Database"] ?? "kpz_restaurant";
+
+
+
+            services.AddDbContext<RestaurantContext>(options =>
+               options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}")
+            );
+
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddControllers();
         }
 
@@ -46,6 +62,8 @@ namespace KPZ_Restaurant_REST_API
             {
                 endpoints.MapControllers();
             });
+
+            PrepDB.PrepPopulation(app);
         }
     }
 }
