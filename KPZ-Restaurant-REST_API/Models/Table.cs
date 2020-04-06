@@ -17,7 +17,7 @@ namespace KPZ_Restaurant_REST_API.Models
         public string Status { get; set; }
         public int RoomId { get; set; }
         [ForeignKey("RoomId")]
-        public virtual Room room { get; set; }
+        public virtual Room Room { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
     }
