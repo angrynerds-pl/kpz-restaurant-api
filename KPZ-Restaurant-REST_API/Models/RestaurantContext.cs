@@ -13,7 +13,7 @@ namespace KPZ_Restaurant_REST_API.Models
 
         }
 
-        public DbSet<User> UserSet { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }

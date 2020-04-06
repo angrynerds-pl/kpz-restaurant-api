@@ -22,13 +22,14 @@ namespace KPZ_Restaurant_REST_API.Models
         {
             System.Console.WriteLine("Appling Migrations...");
 
+            context.Database.EnsureDeleted();
             context.Database.Migrate();
 
-            if(!context.UserSet.Any())
+            if(!context.Users.Any())
             {
                 //Seed data
                 Console.WriteLine("Adding data to User table");
-                context.UserSet.AddRange(
+                context.Users.AddRange(
                     new User() { FirstName="Jakub", LastName="Faldasz", Username="jfaldasz", Password="passw0rd", Rights=1}
 
                     );

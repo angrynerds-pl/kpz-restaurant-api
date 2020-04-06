@@ -42,7 +42,7 @@ namespace KPZ_Restaurant_REST_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserSet");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

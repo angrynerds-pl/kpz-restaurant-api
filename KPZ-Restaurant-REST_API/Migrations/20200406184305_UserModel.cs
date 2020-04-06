@@ -2,12 +2,12 @@
 
 namespace KPZ_Restaurant_REST_API.Migrations
 {
-    public partial class UserModels : Migration
+    public partial class UserModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "UserSet",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -20,14 +20,14 @@ namespace KPZ_Restaurant_REST_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserSet", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserSet");
+                name: "Users");
         }
     }
 }

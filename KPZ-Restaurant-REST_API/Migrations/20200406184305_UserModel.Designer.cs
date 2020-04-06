@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KPZ_Restaurant_REST_API.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    [Migration("20200406160521_UserModels")]
-    partial class UserModels
+    [Migration("20200406184305_UserModel")]
+    partial class UserModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,7 +44,7 @@ namespace KPZ_Restaurant_REST_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserSet");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }
