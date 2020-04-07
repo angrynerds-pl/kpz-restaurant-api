@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace KPZ_Restaurant_REST_API.Repositories
 {
-    interface IRestaurantGeneric <T> where T: class
+    public interface IRestaurantGeneric <T> where T: class
     {
         List<T> GetAll();
         IQueryable<T> Get();
