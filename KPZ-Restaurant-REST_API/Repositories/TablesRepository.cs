@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace KPZ_Restaurant_REST_API.Repositories
 {
-    public class TableRepository: RestaurantGeneric<Table>, ITableRepository
+    public class TablesRepository: RestaurantGeneric<Table>, ITablesRepository
     {
         RestaurantContext _context;
 
-        public TableRepository(RestaurantContext context): base(context) 
+        public TablesRepository(RestaurantContext context): base(context) 
         {
             _context = context
         }

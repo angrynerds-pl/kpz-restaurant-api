@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace KPZ_Restaurant_REST_API.Repositories
 {
-    interface IRoomRepository
+    interface ITablesRepository
     {
     }
 }
