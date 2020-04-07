@@ -18,7 +18,7 @@ namespace KPZ_Restaurant_REST_API.Models
         [ForeignKey("TableId")]
         public virtual Table Table { get; set; }
         public int NumberOfSeats { get; set; }
-        [Column(TypeName="NVARCHAR")]
+        //[Column(TypeName="NVARCHAR")]
         public string CustomerName { get; set; }
 
     }

@@ -12,7 +12,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public TablesRepository(RestaurantContext context): base(context) 
         {
-            _context = context
+            _context = context;
         }
     }
 }

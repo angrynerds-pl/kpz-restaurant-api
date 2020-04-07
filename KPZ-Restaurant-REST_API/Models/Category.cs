@@ -7,7 +7,7 @@ namespace KPZ_Restaurant_REST_API.Models
     {
         [Key]
         public int Id { get; set; }
-        [Column(TypeName ="NVARCHAR")]
+        //[Column(TypeName ="NVARCHAR")]
         public string Name { get; set; }
     }
 }
