@@ -8,7 +8,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public class TablesRepository: RestaurantGeneric<Table>, ITablesRepository
     {
-        RestaurantContext _context;
+        private RestaurantContext _context;
 
         public TablesRepository(RestaurantContext context): base(context) 
         {

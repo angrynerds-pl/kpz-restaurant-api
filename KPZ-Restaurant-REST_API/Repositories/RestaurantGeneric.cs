@@ -9,7 +9,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
     public class RestaurantGeneric<T> : IRestaurantGeneric<T> where T : class
     {
 
-        private readonly RestaurantContext _context;
+        private readonly private RestaurantContext _context;
 
         public RestaurantGeneric(RestaurantContext context)
         {
