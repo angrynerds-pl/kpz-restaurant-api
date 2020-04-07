@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using KPZ_Restaurant_REST_API.Services;
+using KPZ_Restaurant_REST_API.Repositories;
 
 namespace KPZ_Restaurant_REST_API
 {
@@ -35,12 +37,15 @@ namespace KPZ_Restaurant_REST_API
             var database = Configuration["Database"] ?? "kpz_restaurant";
 
 
-
             services.AddDbContext<RestaurantContext>(options =>
                options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}")
             );
 
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            //TODO: Create UnitOfWork for repositories
+            services.AddScoped<IUsersRepository, UsersRepository>();
+         
+            services.AddScoped<IUserService, UserService>();
+
             services.AddControllers();
         }
 

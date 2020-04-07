@@ -8,7 +8,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public class ProductsRepository : RestaurantGeneric<Product>, IProductsRepository
     {
-        RestaurantContext _context;
+        private RestaurantContext _context;
 
         public ProductsRepository(RestaurantContext context) : base(context)
         {

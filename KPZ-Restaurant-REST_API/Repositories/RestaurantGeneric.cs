@@ -16,6 +16,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context = context;
         }
 
+
         public void Create(T entity)
         {
             _context.Set<T>().Add(entity);
