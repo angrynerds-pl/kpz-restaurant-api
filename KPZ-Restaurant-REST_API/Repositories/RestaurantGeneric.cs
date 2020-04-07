@@ -9,12 +9,13 @@ namespace KPZ_Restaurant_REST_API.Repositories
     public class RestaurantGeneric<T> : IRestaurantGeneric<T> where T : class
     {
 
-        private readonly private RestaurantContext _context;
+        private readonly RestaurantContext _context;
 
         public RestaurantGeneric(RestaurantContext context)
         {
             _context = context;
         }
+
 
         public void Create(T entity)
         {

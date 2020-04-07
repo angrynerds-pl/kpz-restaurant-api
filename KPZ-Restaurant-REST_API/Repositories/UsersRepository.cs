@@ -13,5 +13,10 @@ namespace KPZ_Restaurant_REST_API.Repositories
         {
             _context = context;
         }
+
+        public bool CheckIfPresent(User user)
+        {
+            return _context.Set<User>().Any(u => u.Username == user.Username);
+        }
     }
 }
