@@ -23,6 +23,7 @@ namespace KPZ_Restaurant_REST_API.Services
             if (!_userRepo.CheckIfPresent(newWaiter))
             {
                 _userRepo.Create(newWaiter);
+                _userRepo.Save();
                 return newWaiter;
             }
             else
@@ -31,7 +32,7 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public IEnumerable<User> GetAllWaiters()
         {
-            return _userRepo.GetAllByRights(1); //I assumed waiters are marked as 1. TODO Implement an enum to handle user rights
+            return _userRepo.GetAllByRights(UserType.WAITER); //I assumed waiters are marked as 1. TODO Implement an enum to handle user rights
         }
     }
 }

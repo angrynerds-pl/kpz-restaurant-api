@@ -16,7 +16,7 @@ namespace KPZ_Restaurant_REST_API.Models
             {
                 SeedData(serviceScope.ServiceProvider.GetService<RestaurantContext>());
             }
-        
+
         }
         public static void SeedData(RestaurantContext context)
         {
@@ -25,15 +25,18 @@ namespace KPZ_Restaurant_REST_API.Models
             context.Database.EnsureDeleted();
             context.Database.Migrate();
 
-            if(!context.Users.Any())
+
+            if (!context.Users.Any())
             {
                 //Seed data
                 Console.WriteLine("Adding data to User table");
                 context.Users.AddRange(
-                    new User() { FirstName="Jakub", LastName="Faldasz", Username="jfaldasz", Password="passw0rd", Rights=1}
-
-                    );
-            } else
+                    new User() { FirstName = "Jakub", LastName = "Faldasz", Username = "jfaldasz", Password = "passw0rd", Rights = UserType.WAITER },
+                    new User() { FirstName = "Jan", LastName = "Kowalski", Username = "jkowalski", Password = "k0valsk1", Rights = UserType.WAITER }
+                );
+                context.SaveChanges();
+            }
+            else
             {
 
             }
