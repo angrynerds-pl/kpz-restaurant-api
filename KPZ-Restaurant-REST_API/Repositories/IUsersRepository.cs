@@ -9,5 +9,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
     public interface IUsersRepository : IRestaurantGeneric<User>
     {
         bool CheckIfPresent(User user);
+
+        List<User> GetAllByRights(int rights);
     }
 }

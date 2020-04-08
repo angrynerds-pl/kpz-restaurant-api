@@ -31,8 +31,7 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public IEnumerable<User> GetAllWaiters()
         {
-            //TODO: Implement return of all WAITERS not USERS
-            return _userRepo.GetAll();
+            return _userRepo.GetAllByRights(1); //I assumed waiters are marked as 1. TODO Implement an enum to handle user rights
         }
     }
 }
