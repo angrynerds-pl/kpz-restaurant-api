@@ -10,6 +10,6 @@ namespace KPZ_Restaurant_REST_API.Repositories
     {
         bool CheckIfPresent(User user);
 
-        List<User> GetAllByRights(int rights);
+        List<User> GetAllByRights(UserType rights);
     }
 }

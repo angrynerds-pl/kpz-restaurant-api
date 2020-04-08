@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200408092637_AddEnumToUser.cs" />
+    <Compile Remove="Migrations\20200408092637_AddEnumToUser.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="DTO\" />
   </ItemGroup>
 

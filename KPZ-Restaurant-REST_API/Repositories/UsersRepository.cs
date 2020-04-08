@@ -19,9 +19,9 @@ namespace KPZ_Restaurant_REST_API.Repositories
             return _context.Set<User>().Any(u => u.Username == user.Username);
         }
 
-        public List<User> GetAllByRights(int rights)
+        public List<User> GetAllByRights(UserType rights)
         {
-            var result = _context.Users.Where(s => s.Rights == 1).ToList();
+            var result = _context.Users.Where(s => s.Rights == rights).ToList();
             return result;
         }
     }

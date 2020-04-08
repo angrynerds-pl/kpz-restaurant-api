@@ -38,7 +38,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             }
             else
             {
-                return Conflict(null);
+                return Conflict(addedUser);
             }
         }
     }
