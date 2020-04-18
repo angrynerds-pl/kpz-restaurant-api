@@ -10,9 +10,9 @@ namespace KPZ_Restaurant_REST_API.Repositories
         List<T> GetAll();
         IQueryable<T> Get();
         T GetById(int id);
-        void DeleteById(int id);
-        void Update(T entity);
-        void Create(T entity);
+        T DeleteById(int id);
+        T Update(T entity);
+        T Create(T entity);
         void Save();
     }
 }

@@ -14,5 +14,12 @@ namespace KPZ_Restaurant_REST_API.Repositories
         {
             _context = context;
         }
+
+        public bool OrderCorrect(Order order)
+        {
+            return _context.Set<Table>().Any(t => t.Id == order.TableId)
+                && _context.Set<User>().Any(w => w.Id == order.Id)
+                && _context.Set<Restaurant>().Any(r => r.Id == order.RestaurantId);
+        }
     }
 }

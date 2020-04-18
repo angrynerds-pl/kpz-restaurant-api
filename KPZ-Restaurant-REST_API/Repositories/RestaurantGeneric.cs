@@ -17,15 +17,15 @@ namespace KPZ_Restaurant_REST_API.Repositories
         }
 
 
-        public void Create(T entity)
+        public T Create(T entity)
         {
-            _context.Set<T>().Add(entity);
+           return _context.Set<T>().Add(entity).Entity;
         }
 
-        public void DeleteById(int id)
+        public T DeleteById(int id)
         {
             T entities = _context.Set<T>().Find(id);
-            _context.Set<T>().Remove(entities);
+            return _context.Set<T>().Remove(entities).Entity;
         }
 
         public IQueryable<T> Get()
@@ -48,9 +48,9 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(T entity)
+        public T Update(T entity)
         {
-            _context.Update(entity);
+            return _context.Update(entity).Entity;
         }
     }
 }
