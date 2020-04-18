@@ -20,7 +20,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public ActionResult<IEnumerable<User>> GetAllWaiters()
         {
             var waiters = _userService.GetAllWaiters();
@@ -28,7 +28,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             return Ok(waiters);
         }
 
-        [HttpPost]
+        [HttpPost("addNew")]
         public IActionResult AddNewWaiter([FromBody] User user)
         {
             var addedUser = _userService.AddNewWaiter(user);

@@ -7,6 +7,10 @@ namespace KPZ_Restaurant_REST_API.Models
     {
         [Key]
         public int Id { get; set; }
+        public int RestaurantId {get; set;}
+        
+        [ForeignKey("RestaurantId")]
+        public virtual Restaurant Restaurant { get; set; }
         //[Column(TypeName ="NVARCHAR")]
         public string Name { get; set; }
     }

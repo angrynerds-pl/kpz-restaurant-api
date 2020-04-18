@@ -22,12 +22,14 @@ namespace KPZ_Restaurant_REST_API.Services
         {
             if (!_userRepo.CheckIfPresent(newWaiter))
             {
-                _userRepo.Create(newWaiter);
-                _userRepo.Save();
-                return newWaiter;
+                if (newWaiter.Rights == UserType.WAITER || newWaiter.Rights == UserType.HEAD_WAITER)
+                {
+                    _userRepo.Create(newWaiter);
+                    _userRepo.Save();
+                    return newWaiter;
+                }
             }
-            else
-                return null;
+            return null;
         }
 
         public IEnumerable<User> GetAllWaiters()
