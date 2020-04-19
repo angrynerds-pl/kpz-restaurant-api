@@ -8,5 +8,6 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface IOrdersRepository: IRestaurantGeneric<Order>
     {
+        bool OrderCorrect(Order order);
     }
 }

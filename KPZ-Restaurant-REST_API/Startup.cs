@@ -43,10 +43,15 @@ namespace KPZ_Restaurant_REST_API
 
             //TODO: Create UnitOfWork for repositories
             services.AddScoped<IUsersRepository, UsersRepository>();
-         
             services.AddScoped<IUserService, UserService>();
 
-            services.AddControllers();
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IProductsInOrderRepository, ProductsInOrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
+
+            services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

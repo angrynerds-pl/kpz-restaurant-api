@@ -11,6 +11,10 @@ namespace KPZ_Restaurant_REST_API.Models
     {
         [Key]
         public int Id { get; set; }
+        public int RestaurantId {get; set;}
+        
+        [ForeignKey("RestaurantId")]
+        public virtual Restaurant Restaurant { get; set; }
         //[DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

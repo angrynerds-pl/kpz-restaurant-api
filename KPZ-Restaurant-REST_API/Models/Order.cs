@@ -11,10 +11,18 @@ namespace KPZ_Restaurant_REST_API.Models
     {
         [Key]
         public int Id { get; set; }
+        public int RestaurantId {get; set;}
+        
+        [ForeignKey("RestaurantId")]
+        public virtual Restaurant Restaurant { get; set; }
         public int TableId { get; set; }
         [ForeignKey("TableId")]
         public virtual Table Table { get; set; }
+        public int WaiterId { get; set; }
+        [ForeignKey("WaiterId")]
+        public virtual User Waiter { get; set; }
         public DateTime OrderDate { get; set; }
+        public virtual List<ProductInOrder> ProductsInOrder {get; set;}
 
 
     }

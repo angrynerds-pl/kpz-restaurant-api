@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KPZ_Restaurant_REST_API.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    [Migration("20200407095800_whole-db-second-migration")]
-    partial class wholedbsecondmigration
+    [Migration("20200418205004_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,12 @@ namespace KPZ_Restaurant_REST_API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Categories");
                 });
@@ -46,12 +51,22 @@ namespace KPZ_Restaurant_REST_API.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TableId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WaiterId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RestaurantId");
+
                     b.HasIndex("TableId");
+
+                    b.HasIndex("WaiterId");
 
                     b.ToTable("Orders");
                 });
@@ -72,9 +87,14 @@ namespace KPZ_Restaurant_REST_API.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Products");
                 });
@@ -120,6 +140,9 @@ namespace KPZ_Restaurant_REST_API.Migrations
                     b.Property<int>("NumberOfSeats")
                         .HasColumnType("int");
 
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -128,9 +151,26 @@ namespace KPZ_Restaurant_REST_API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RestaurantId");
+
                     b.HasIndex("TableId");
 
                     b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.Restaurant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.Room", b =>
@@ -146,10 +186,15 @@ namespace KPZ_Restaurant_REST_API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rows")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Rooms");
                 });
@@ -202,6 +247,9 @@ namespace KPZ_Restaurant_REST_API.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rights")
                         .HasColumnType("int");
 
@@ -210,14 +258,37 @@ namespace KPZ_Restaurant_REST_API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RestaurantId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.Category", b =>
+                {
+                    b.HasOne("KPZ_Restaurant_REST_API.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.Order", b =>
                 {
+                    b.HasOne("KPZ_Restaurant_REST_API.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("KPZ_Restaurant_REST_API.Models.Table", "Table")
                         .WithMany()
                         .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KPZ_Restaurant_REST_API.Models.User", "Waiter")
+                        .WithMany()
+                        .HasForeignKey("WaiterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -229,12 +300,18 @@ namespace KPZ_Restaurant_REST_API.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("KPZ_Restaurant_REST_API.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.ProductInOrder", b =>
                 {
                     b.HasOne("KPZ_Restaurant_REST_API.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("ProductsInOrder")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -248,10 +325,25 @@ namespace KPZ_Restaurant_REST_API.Migrations
 
             modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.Reservation", b =>
                 {
+                    b.HasOne("KPZ_Restaurant_REST_API.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("KPZ_Restaurant_REST_API.Models.Table", "Table")
                         .WithMany()
                         .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.Room", b =>
+                {
+                    b.HasOne("KPZ_Restaurant_REST_API.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -261,6 +353,15 @@ namespace KPZ_Restaurant_REST_API.Migrations
                         .WithMany()
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.User", b =>
+                {
+                    b.HasOne("KPZ_Restaurant_REST_API.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
