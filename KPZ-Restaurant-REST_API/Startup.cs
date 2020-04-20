@@ -49,11 +49,11 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<IProductsInOrderRepository, ProductsInOrderRepository>();
             services.AddScoped<IOrderService, OrderService>();
 
-            services.AddControllers();
-
-            services.AddControllers().AddJsonOptions(options => {
+            services.AddControllers().AddJsonOptions(options =>
+            {
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });
+         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,7 +75,7 @@ namespace KPZ_Restaurant_REST_API
                 endpoints.MapControllers();
             });
 
-            PrepDB.PrepPopulation(app);
+            Task.WaitAll(PrepDB.PrepPopulation(app));
         }
     }
 }

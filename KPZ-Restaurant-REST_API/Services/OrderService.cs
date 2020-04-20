@@ -22,7 +22,7 @@ namespace KPZ_Restaurant_REST_API.Services
             if (orderCorrect)
             {
                 _ordersRepo.Create(newOrder);
-                _ordersRepo.SaveAsync();
+                await _ordersRepo.SaveAsync();
                 return newOrder;
             }
             else

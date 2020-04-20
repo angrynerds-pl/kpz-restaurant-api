@@ -44,7 +44,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async void SaveAsync()
+        public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }

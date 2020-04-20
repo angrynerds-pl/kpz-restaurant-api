@@ -23,7 +23,7 @@ namespace KPZ_Restaurant_REST_API.Services
             if (!waiterAlreadyRegistered)
             {
                 _userRepo.Create(newWaiter);
-                _userRepo.SaveAsync();
+                await _userRepo.SaveAsync();
                 return newWaiter;
             }
             else

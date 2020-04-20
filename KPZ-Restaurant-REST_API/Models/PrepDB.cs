@@ -10,20 +10,20 @@ namespace KPZ_Restaurant_REST_API.Models
 {
     public class PrepDB
     {
-        public static void PrepPopulation(IApplicationBuilder app)
+        public static async Task PrepPopulation(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                SeedData(serviceScope.ServiceProvider.GetService<RestaurantContext>());
+                await SeedData(serviceScope.ServiceProvider.GetService<RestaurantContext>());
             }
 
         }
-        public static void SeedData(RestaurantContext context)
+        public static async Task SeedData(RestaurantContext context)
         {
             System.Console.WriteLine("Appling Migrations...");
 
-            context.Database.EnsureDeleted();
-            context.Database.Migrate();
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.MigrateAsync();
 
 
             var mcdonalds = new Restaurant() { Name = "McDonalds" };
@@ -33,7 +33,7 @@ namespace KPZ_Restaurant_REST_API.Models
                 context.Restaurants.AddRange(
                     mcdonalds
                 );
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
 
@@ -42,10 +42,10 @@ namespace KPZ_Restaurant_REST_API.Models
                 //Seed data
                 Console.WriteLine("Adding data to User table");
                 context.Users.AddRange(
-                    new User() { FirstName = "Jakub", LastName = "Faldasz", Username = "jfaldasz", Password = "passw0rd", Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
-                    new User() { FirstName = "Jan", LastName = "Kowalski", Username = "jkowalski", Password = "k0valsk1", Rights = UserType.WAITER, RestaurantId = mcdonalds.Id }
+                    new User() { FirstName = "Janusz", LastName = "Biernat", Username = "jbiernat", Password = "architektura", Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
+                    new User() { FirstName = "Dariusz", LastName = "Caban", Username = "dcaban", Password = "łyndołs", Rights = UserType.WAITER, RestaurantId = mcdonalds.Id }
                 );
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
             else
             {

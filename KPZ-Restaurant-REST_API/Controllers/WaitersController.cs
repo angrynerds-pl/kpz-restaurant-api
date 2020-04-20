@@ -40,9 +40,9 @@ namespace KPZ_Restaurant_REST_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddNewWaiter([FromBody] User user)
+        public async Task<IActionResult> AddNewWaiter([FromBody] User user)
         {
-            var addedUser = _userService.AddNewWaiter(user);
+            var addedUser = await _userService.AddNewWaiter(user);
 
             if (addedUser != null)
                 return Ok(addedUser);

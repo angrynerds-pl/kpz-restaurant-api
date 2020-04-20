@@ -13,6 +13,6 @@ namespace KPZ_Restaurant_REST_API.Repositories
         void DeleteById(int id);
         void Update(T entity);
         void Create(T entity);
-        void SaveAsync();
+        Task SaveAsync();
     }
 }
