@@ -11,35 +11,43 @@ namespace KPZ_Restaurant_REST_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WaiterController : ControllerBase
+    public class WaitersController : ControllerBase
     {
         private IUserService _userService;
 
-        public WaiterController(IUserService userService)
+        public WaitersController(IUserService userService)
         {
             _userService = userService;
         }
 
-        [HttpGet("all")]
-        public ActionResult<IEnumerable<User>> GetAllWaiters()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllWaiters()
         {
-            var waiters = _userService.GetAllWaiters();
+            var waiters = await _userService.GetAllWaiters();
 
             return Ok(waiters);
         }
 
-        [HttpPost("addNew")]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetWaiter(int id)
+        {
+            var user = await _userService.GetById(id);
+            
+            if (user != null)
+                return Ok(user);
+            else
+                return NotFound(null);
+        }
+
+        [HttpPost]
         public IActionResult AddNewWaiter([FromBody] User user)
         {
             var addedUser = _userService.AddNewWaiter(user);
-            if(addedUser != null)
-            {
+
+            if (addedUser != null)
                 return Ok(addedUser);
-            }
             else
-            {
                 return Conflict(addedUser);
-            }
         }
     }
 }

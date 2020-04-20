@@ -42,8 +42,8 @@ namespace KPZ_Restaurant_REST_API.Models
                 //Seed data
                 Console.WriteLine("Adding data to User table");
                 context.Users.AddRange(
-                    new User() { FirstName = "Jakub", LastName = "Faldasz", Username = "jfaldasz", Password = "passw0rd", Rights = UserType.WAITER, Restaurant = context.Restaurants.Find(1) },
-                    new User() { FirstName = "Jan", LastName = "Kowalski", Username = "jkowalski", Password = "k0valsk1", Rights = UserType.WAITER, Restaurant = context.Restaurants.Find(1) }
+                    new User() { FirstName = "Jakub", LastName = "Faldasz", Username = "jfaldasz", Password = "passw0rd", Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
+                    new User() { FirstName = "Jan", LastName = "Kowalski", Username = "jkowalski", Password = "k0valsk1", Rights = UserType.WAITER, RestaurantId = mcdonalds.Id }
                 );
                 context.SaveChanges();
             }

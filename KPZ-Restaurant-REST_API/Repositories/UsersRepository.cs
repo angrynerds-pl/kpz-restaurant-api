@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace KPZ_Restaurant_REST_API.Repositories
 {
@@ -14,15 +15,14 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context = context;
         }
 
-        public bool CheckIfPresent(User user)
+        public async Task<bool> CheckIfPresent(User user)
         {
-            return _context.Set<User>().Any(u => u.Username == user.Username);
+            return await _context.Set<User>().AnyAsync(u => u.Username == user.Username);
         }
 
-        public List<User> GetAllByRights(UserType rights)
-        {
-            var result = _context.Users.Where(s => s.Rights == rights).ToList();
-            return result;
+        public async Task<List<User>> GetAllByRights(UserType rights)
+        {    
+            return await _context.Users.Where( x => x.Rights == rights ).ToListAsync(); 
         }
     }
 }

@@ -49,6 +49,8 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<IProductsInOrderRepository, ProductsInOrderRepository>();
             services.AddScoped<IOrderService, OrderService>();
 
+            services.AddControllers();
+
             services.AddControllers().AddJsonOptions(options => {
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });

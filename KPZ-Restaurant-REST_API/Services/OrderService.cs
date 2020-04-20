@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using KPZ_Restaurant_REST_API.Models;
 using KPZ_Restaurant_REST_API.Repositories;
 
@@ -15,13 +16,14 @@ namespace KPZ_Restaurant_REST_API.Services
             _productsInOrderRepo = productsInOrderRepo;
         }
 
-        public Order CreateNewOrder(Order newOrder)
+        public async Task<Order> CreateNewOrder(Order newOrder)
         {
-            if (_ordersRepo.OrderCorrect(newOrder))
+            var orderCorrect = await _ordersRepo.OrderCorrect(newOrder);
+            if (orderCorrect)
             {
-                var addedEntity = _ordersRepo.Create(newOrder);
-                _ordersRepo.Save();
-                return addedEntity;
+                _ordersRepo.Create(newOrder);
+                _ordersRepo.SaveAsync();
+                return newOrder;
             }
             else
             {

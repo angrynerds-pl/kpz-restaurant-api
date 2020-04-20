@@ -7,12 +7,12 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface IRestaurantGeneric <T> where T: class
     {
-        List<T> GetAll();
+        Task<List<T>> GetAll();
         IQueryable<T> Get();
-        T GetById(int id);
-        T DeleteById(int id);
-        T Update(T entity);
-        T Create(T entity);
-        void Save();
+        Task<T> GetById(int id);
+        void DeleteById(int id);
+        void Update(T entity);
+        void Create(T entity);
+        void SaveAsync();
     }
 }

@@ -10,31 +10,38 @@ namespace KPZ_Restaurant_REST_API.Services
     public class UserService : IUserService
     {
         private IUsersRepository _userRepo;
-        //private IRestaurantGeneric<User> _genericRepo;
 
         public UserService(IUsersRepository userRepo)//, IRestaurantGeneric<User> genericRepo)
         {
             _userRepo = userRepo;
-            //_genericRepo = genericRepo;
         }
 
-        public User AddNewWaiter(User newWaiter)
+        public async Task<User> AddNewWaiter(User newWaiter)
         {
-            if (!_userRepo.CheckIfPresent(newWaiter))
+            var waiterAlreadyRegistered = await _userRepo.CheckIfPresent(newWaiter);
+
+            if (!waiterAlreadyRegistered)
             {
-                if (newWaiter.Rights == UserType.WAITER || newWaiter.Rights == UserType.HEAD_WAITER)
-                {
-                    _userRepo.Create(newWaiter);
-                    _userRepo.Save();
-                    return newWaiter;
-                }
+                _userRepo.Create(newWaiter);
+                _userRepo.SaveAsync();
+                return newWaiter;
             }
-            return null;
+            else
+                return null;
         }
 
-        public IEnumerable<User> GetAllWaiters()
+        public async Task<IEnumerable<User>> GetAllWaiters()
         {
-            return _userRepo.GetAllByRights(UserType.WAITER); //I assumed waiters are marked as 1. TODO Implement an enum to handle user rights
+            var waiters = await _userRepo.GetAllByRights(UserType.WAITER); //I assumed waiters are marked as 1. TODO Implement an enum to handle user rights
+            var headWaiter = await _userRepo.GetAllByRights(UserType.HEAD_WAITER);
+            waiters.AddRange(headWaiter);
+
+            return waiters;
+        }
+
+        public async Task<User> GetById(int id)
+        {
+            return await _userRepo.GetById(id);
         }
     }
 }

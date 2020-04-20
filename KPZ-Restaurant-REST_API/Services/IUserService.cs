@@ -8,7 +8,8 @@ namespace KPZ_Restaurant_REST_API.Services
 {
     public interface IUserService
     {
-        User AddNewWaiter(User newWaiter);
-        IEnumerable<User> GetAllWaiters();
+        Task<User> AddNewWaiter(User newWaiter);
+        Task<IEnumerable<User>> GetAllWaiters();
+        Task<User> GetById(int id);
     }
 }
