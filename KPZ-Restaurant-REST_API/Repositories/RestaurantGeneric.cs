@@ -1,4 +1,5 @@
 ﻿using KPZ_Restaurant_REST_API.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +18,15 @@ namespace KPZ_Restaurant_REST_API.Repositories
         }
 
 
-        public T Create(T entity)
+        public void Create(T entity)
         {
-           return _context.Set<T>().Add(entity).Entity;
+            _context.Set<T>().Add(entity);
         }
 
-        public T DeleteById(int id)
+        public void DeleteById(int id)
         {
             T entities = _context.Set<T>().Find(id);
-            return _context.Set<T>().Remove(entities).Entity;
+            _context.Set<T>().Remove(entities);
         }
 
         public IQueryable<T> Get()
@@ -33,24 +34,24 @@ namespace KPZ_Restaurant_REST_API.Repositories
             throw new NotImplementedException();
         }
 
-        public List<T> GetAll()
+        public async Task<List<T>> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetById(int id)
         {
-            return _context.Set<T>().Find(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public T Update(T entity)
+        public void Update(T entity)
         {
-            return _context.Update(entity).Entity;
+            _context.Update(entity);
         }
     }
 }

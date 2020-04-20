@@ -1,4 +1,5 @@
 ﻿using KPZ_Restaurant_REST_API.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,11 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context = context;
         }
 
-        public bool OrderCorrect(Order order)
+        public async Task<bool> OrderCorrect(Order order)
         {
-            return _context.Set<Table>().Any(t => t.Id == order.TableId)
-                && _context.Set<User>().Any(w => w.Id == order.Id)
-                && _context.Set<Restaurant>().Any(r => r.Id == order.RestaurantId);
+            return await _context.Set<Table>().AnyAsync(t => t.Id == order.TableId)
+                && await _context.Set<User>().AnyAsync(w => w.Id == order.Id)
+                && await _context.Set<Restaurant>().AnyAsync(r => r.Id == order.RestaurantId);
         }
     }
 }
