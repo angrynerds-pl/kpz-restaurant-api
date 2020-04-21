@@ -19,7 +19,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
         public async Task<bool> OrderCorrect(Order order)
         {
             return await _context.Set<Table>().AnyAsync(t => t.Id == order.TableId)
-                && await _context.Set<User>().AnyAsync(w => w.Id == order.Id)
+                && await _context.Set<User>().AnyAsync(w => w.Id == order.WaiterId)
                 && await _context.Set<Restaurant>().AnyAsync(r => r.Id == order.RestaurantId);
         }
     }

@@ -8,12 +8,12 @@ namespace KPZ_Restaurant_REST_API.Services
     public class OrderService : IOrderService
     {
         private IOrdersRepository _ordersRepo;
-        private IProductsInOrderRepository _productsInOrderRepo;
+        private IOrderedProductsRepository _orderedProductsRepo;
 
-        public OrderService(IOrdersRepository ordersRepo, IProductsInOrderRepository productsInOrderRepo)
+        public OrderService(IOrdersRepository ordersRepo, IOrderedProductsRepository productsInOrderRepo)
         {
             _ordersRepo = ordersRepo;
-            _productsInOrderRepo = productsInOrderRepo;
+            _orderedProductsRepo = productsInOrderRepo;
         }
 
         public async Task<Order> CreateNewOrder(Order newOrder)
@@ -21,7 +21,7 @@ namespace KPZ_Restaurant_REST_API.Services
             var orderCorrect = await _ordersRepo.OrderCorrect(newOrder);
             if (orderCorrect)
             {
-                _ordersRepo.Create(newOrder);
+                await _ordersRepo.Add(newOrder);
                 await _ordersRepo.SaveAsync();
                 return newOrder;
             }
@@ -29,6 +29,35 @@ namespace KPZ_Restaurant_REST_API.Services
             {
                 return null;
             }
+        }
+
+        public async Task<IEnumerable<OrderedProducts>> AddOrderedProducts(List<OrderedProducts> orderedProducts)
+        {
+            foreach (var orderedProduct in orderedProducts)
+            {
+                var orderedProductCorrect = await _orderedProductsRepo.OrderedProductCorrect(orderedProduct);
+                if (orderedProductCorrect)
+                    await _orderedProductsRepo.Add(orderedProduct);
+                else
+                    return null;
+            }
+
+            await _ordersRepo.SaveAsync();
+            return orderedProducts;
+        }
+
+        public async Task<IEnumerable<Order>> GetAllOrders()
+        {
+            return await _ordersRepo.GetAll();
+        }
+
+        public async Task<IList<OrderedProducts>> GetOrderedProducts(int orderId)
+        {
+            var orderedProducts = await _orderedProductsRepo.GetOrderedProducts(orderId);
+            if (orderedProducts == null || orderedProducts.Count == 0)
+                return null;
+            else
+                return orderedProducts;
         }
     }
 }

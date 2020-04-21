@@ -12,7 +12,8 @@ namespace KPZ_Restaurant_REST_API.Repositories
         Task<T> GetById(int id);
         void DeleteById(int id);
         void Update(T entity);
-        void Create(T entity);
+        Task Add(T entity);
+        Task AddRange(IEnumerable<T> elements);
         Task SaveAsync();
     }
 }

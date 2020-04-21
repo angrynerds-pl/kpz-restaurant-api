@@ -18,9 +18,14 @@ namespace KPZ_Restaurant_REST_API.Repositories
         }
 
 
-        public void Create(T entity)
+        public async Task Add(T entity)
         {
-            _context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
+        }
+
+        public async Task AddRange(IEnumerable<T> elements)
+        {
+            await _context.Set<T>().AddRangeAsync(elements);
         }
 
         public void DeleteById(int id)

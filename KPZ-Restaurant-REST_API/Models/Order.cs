@@ -22,7 +22,7 @@ namespace KPZ_Restaurant_REST_API.Models
         [ForeignKey("WaiterId")]
         public virtual User Waiter { get; set; }
         public DateTime OrderDate { get; set; }
-        public virtual List<ProductInOrder> ProductsInOrder {get; set;}
+        public virtual List<OrderedProducts> OrderedProducts {get; set;}
 
 
     }

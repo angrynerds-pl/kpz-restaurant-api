@@ -36,7 +36,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (user != null)
                 return Ok(user);
             else
-                return NotFound(null);
+                return NotFound(user);
         }
 
         [HttpPost]

@@ -46,7 +46,7 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IOrdersRepository, OrdersRepository>();
-            services.AddScoped<IProductsInOrderRepository, ProductsInOrderRepository>();
+            services.AddScoped<IOrderedProductsRepository, OrderedProductsRepository>();
             services.AddScoped<IOrderService, OrderService>();
 
             services.AddControllers().AddJsonOptions(options =>
@@ -75,7 +75,7 @@ namespace KPZ_Restaurant_REST_API
                 endpoints.MapControllers();
             });
 
-            Task.WaitAll(PrepDB.PrepPopulation(app));
+            PrepDB.PrepPopulation(app);
         }
     }
 }
