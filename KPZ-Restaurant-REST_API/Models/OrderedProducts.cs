@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KPZ_Restaurant_REST_API.Models
 {
-    public class ProductInOrder
+    public class OrderedProducts
     {
         [Key]
         public int Id { get; set; }
@@ -17,7 +17,6 @@ namespace KPZ_Restaurant_REST_API.Models
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
-        //[Column(TypeName="NVARCHAR")]
         public string Status { get; set; }
     }
 }

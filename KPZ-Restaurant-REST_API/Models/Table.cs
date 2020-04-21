@@ -13,7 +13,6 @@ namespace KPZ_Restaurant_REST_API.Models
         public int Id { get; set; }
         public int Number { get; set; }
         public int Seats { get; set; }
-        //[Column(TypeName="NVARCHAR")]
         public string Status { get; set; }
         public int RoomId { get; set; }
         [ForeignKey("RoomId")]
