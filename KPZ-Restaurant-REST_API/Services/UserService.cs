@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -45,6 +47,7 @@ namespace KPZ_Restaurant_REST_API.Services
             return tokenHandler.WriteToken(token);
         }
 
+
         public UserService(IUsersRepository userRepo)//, IRestaurantGeneric<User> genericRepo)
         {
             _userRepo = userRepo;
@@ -56,7 +59,7 @@ namespace KPZ_Restaurant_REST_API.Services
             if (users.Count != 1)
                 return null;
             var user = users[0];
-            if (user.Password == model.Password)
+            if (user.Password == model.Password) //TODO Hash passwords
                 return CreateToken(user);
             return null;
         }
