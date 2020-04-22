@@ -4,7 +4,7 @@ using KPZ_Restaurant_REST_API.Repositories;
 
 namespace KPZ_Restaurant_REST_API.Services
 {
-    public class RestaurantService
+    public class RestaurantService : IRestaurantService
     {
         private IRestaurantRepository _restaurantRepo;
 

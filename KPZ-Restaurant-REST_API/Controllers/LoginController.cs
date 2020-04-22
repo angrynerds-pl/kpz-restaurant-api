@@ -16,8 +16,8 @@ namespace KPZ_Restaurant_REST_API.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private IUserService _userService;
-        private IRestaurantService _restaurantService;
+        private readonly IUserService _userService;
+        private readonly IRestaurantService _restaurantService;
 
         public LoginController(IUserService service, IRestaurantService restaurantService)
         {

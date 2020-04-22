@@ -52,6 +52,8 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<IOrderedProductsRepository, OrderedProductsRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+            services.AddScoped<IRestaurantService, RestaurantService>();
+
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
