@@ -55,13 +55,11 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public async Task<string> AuthenticateUser(LoginModel model)
         {
-            var users = await _userRepo.GetAllFiltered(user => user.Username == model.Username);
-            if (users.Count != 1)
-                return null;
-            var user = users[0];
-            if (user.Password == model.Password) //TODO Hash passwords
+            var user = await _userRepo.FindOne(user => user.Username == model.Username);
+            if (user != null && user.Password == model.Password) //TODO Hash passwords
                 return CreateToken(user);
-            return null;
+            else
+                return null;
         }
 
         public async Task<User> GetByUsername(string username)
@@ -86,15 +84,24 @@ namespace KPZ_Restaurant_REST_API.Services
                 return null;
         }
 
-        public async Task<User> AddNewManager(User manager)
+        public async Task<User> AddNewManager(RegisterModel manager, int restaurantId)
         {
-            
-            var alreadyRegistered = await _userRepo.CheckIfPresent(manager);
-            if (alreadyRegistered == true || manager.Rights != UserType.MANAGER)
+            User newManager = new User()
+            {
+                Username = manager.Username,
+                Password = manager.Password,
+                FirstName = manager.FirstName,
+                LastName = manager.LastName,
+                Rights = UserType.MANAGER,
+                RestaurantId = restaurantId
+            };
+
+            var alreadyRegistered = await _userRepo.CheckIfPresent(newManager);
+            if (alreadyRegistered == true || newManager.Rights != UserType.MANAGER)
                 return null;
-            await _userRepo.Add(manager);
+            await _userRepo.Add(newManager);
             await _userRepo.SaveAsync();
-            return manager;
+            return newManager;
         }
 
         public async Task<IEnumerable<User>> GetAllWaiters()

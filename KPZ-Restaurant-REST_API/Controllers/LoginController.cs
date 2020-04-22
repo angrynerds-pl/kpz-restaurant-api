@@ -28,20 +28,16 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var newManager = new User();
-            newManager.Username = model.Username;
-            newManager.Rights = UserType.MANAGER;
-            newManager.FirstName = model.FirstName;
-            newManager.LastName = model.LastName;
-            newManager.Password = model.Password;
-            newManager = await _userService.AddNewManager(newManager);
+            var restaurant = await _restaurantService.AddRestaurant(model);
+            var newManager = await _userService.AddNewManager(model, restaurant.Id);
+
             if (newManager == null)
                 return BadRequest(model);
-            var restaurant = new Restaurant();
-            restaurant.Name = model.RestaurantName;
-            restaurant = await _restaurantService.AddRestaurant(restaurant);
-            newManager.RestaurantId = restaurant.Id;
-            return Ok(model);
+            else
+            {
+                newManager.RestaurantId = restaurant.Id;
+                return Ok(model);
+            }
         }
 
         [HttpPost("authenticate")]

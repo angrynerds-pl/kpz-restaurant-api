@@ -5,6 +5,6 @@ namespace KPZ_Restaurant_REST_API.Services
 {
     public interface IRestaurantService
     {
-        Task<Restaurant> AddRestaurant(Restaurant restaurant);
+        Task<Restaurant> AddRestaurant(RegisterModel registerModel);
     }
 }

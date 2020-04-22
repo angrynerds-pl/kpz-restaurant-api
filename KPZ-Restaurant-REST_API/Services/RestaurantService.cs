@@ -15,10 +15,14 @@ namespace KPZ_Restaurant_REST_API.Services
             _restaurantRepo = restaurantRepo;
         }
 
-        public async Task<Restaurant> AddRestaurant(Restaurant restaurant)
+        public async Task<Restaurant> AddRestaurant(RegisterModel registerModel)
         {
-            await _restaurantRepo.Add(restaurant);
-            return restaurant;
+            Restaurant newRestaurant = new Restaurant() { Name = registerModel.RestaurantName };
+
+            await _restaurantRepo.Add(newRestaurant);
+            await _restaurantRepo.SaveAsync();
+            
+            return newRestaurant;
         }
     }
 }
