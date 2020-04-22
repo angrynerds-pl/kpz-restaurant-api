@@ -61,6 +61,14 @@ namespace KPZ_Restaurant_REST_API.Services
             return null;
         }
 
+        public async Task<User> GetByUsername(string username)
+        {
+            var users = await _userRepo.GetAllFiltered(user => user.Username == username);
+            if (users.Count != 1)
+                return null;
+            return users[0];
+        }
+
         public async Task<User> AddNewWaiter(User newWaiter)
         {
             var waiterAlreadyRegistered = await _userRepo.CheckIfPresent(newWaiter);
