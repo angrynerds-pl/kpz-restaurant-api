@@ -46,7 +46,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             var userToken = await _userService.AuthenticateUser(model);
             if (userToken == null)
                 return BadRequest(model);
-            return Ok(userToken);
+            return Ok( new { token = userToken });
         }
 
         [HttpGet("user_data")]
