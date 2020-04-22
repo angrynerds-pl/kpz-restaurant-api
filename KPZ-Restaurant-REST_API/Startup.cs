@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using KPZ_Restaurant_REST_API.Models;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using KPZ_Restaurant_REST_API.Services;
 using KPZ_Restaurant_REST_API.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KPZ_Restaurant_REST_API
 {
@@ -48,6 +51,20 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IOrderedProductsRepository, OrderedProductsRepository>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                            .GetBytes("ABCDABCDEFGHEFGH")),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             services.AddScoped<ITablesRepository, TablesRepository>();
             services.AddScoped<ITableService, TableService>();
@@ -70,6 +87,8 @@ namespace KPZ_Restaurant_REST_API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
