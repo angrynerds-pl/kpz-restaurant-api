@@ -15,6 +15,11 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context = context;
         }
 
+        public async Task<List<User>> GetAllFiltered(Func<User, bool> filter)
+        {
+            return await _context.Users.Where(x => filter(x)).ToListAsync();
+        }
+
         public async Task<bool> CheckIfPresent(User user)
         {
             return await _context.Set<User>().AnyAsync(u => u.Username == user.Username);

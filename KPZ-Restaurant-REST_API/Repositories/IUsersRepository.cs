@@ -10,6 +10,8 @@ namespace KPZ_Restaurant_REST_API.Repositories
     {
         Task<bool> CheckIfPresent(User user);
 
+        Task<List<User>> GetAllFiltered(Func<User, bool> filter);
+
         Task<List<User>> GetAllByRights(UserType rights);
     }
 }

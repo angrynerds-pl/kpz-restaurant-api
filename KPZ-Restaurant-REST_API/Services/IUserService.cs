@@ -10,7 +10,7 @@ namespace KPZ_Restaurant_REST_API.Services
     {
         Task<User> AddNewWaiter(User newWaiter);
 
-        Task<User> AddNewManager(User manager, string restaurantName);
+        Task<User> AddNewManager(User manager);
 
         Task<IEnumerable<User>> GetAllUsers();
         Task<IEnumerable<User>> GetAllWaiters();
