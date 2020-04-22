@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace KPZ_Restaurant_REST_API.Repositories
@@ -34,6 +35,8 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context.Set<T>().Remove(entities);
         }
 
+
+
         public IQueryable<T> Get()
         {
             throw new NotImplementedException();
@@ -47,6 +50,16 @@ namespace KPZ_Restaurant_REST_API.Repositories
         public async Task<T> GetById(int id)
         {
             return await _context.Set<T>().FindAsync(id);
+        }
+
+        public async Task<ICollection<T>> GetWhere(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().Where(predicate).ToListAsync();
+        }
+
+        public async Task<T> FindOne(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().SingleOrDefaultAsync(predicate);
         }
 
         public async Task SaveAsync()
