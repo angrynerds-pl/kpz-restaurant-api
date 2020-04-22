@@ -16,10 +16,10 @@ namespace KPZ_Restaurant_REST_API.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private UserService _userService;
-        private RestaurantService _restaurantService;
+        private IUserService _userService;
+        private IRestaurantService _restaurantService;
 
-        public LoginController(UserService service, RestaurantService restaurantService)
+        public LoginController(IUserService service, IRestaurantService restaurantService)
         {
             _userService = service;
             _restaurantService = restaurantService;
@@ -44,7 +44,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             return Ok(model);
         }
 
-        [HttpGet("authenticate")]
+        [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] LoginModel model)
         {
             var userToken = await _userService.AuthenticateUser(model);
