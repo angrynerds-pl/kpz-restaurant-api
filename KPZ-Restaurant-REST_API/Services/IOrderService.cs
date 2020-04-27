@@ -8,7 +8,7 @@ namespace KPZ_Restaurant_REST_API.Services
     {
         Task<Order> CreateNewOrder(Order newOrder);
         Task<IEnumerable<OrderedProducts>> AddOrderedProducts(List<OrderedProducts> orderedProducts);
-        Task<IEnumerable<Order>> GetAllOrders();
+        Task<IEnumerable<Order>> GetAllOrders(int restaurantId);
         Task<IList<OrderedProducts>> GetOrderedProducts(int orderId);
     }
 }

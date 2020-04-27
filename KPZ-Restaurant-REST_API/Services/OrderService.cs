@@ -46,9 +46,9 @@ namespace KPZ_Restaurant_REST_API.Services
             return orderedProducts;
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrders()
+        public async Task<IEnumerable<Order>> GetAllOrders(int restaurantId)
         {
-            return await _ordersRepo.GetAll();
+            return await _ordersRepo.GetWhere(o => o.RestaurantId == restaurantId);
         }
 
         public async Task<IList<OrderedProducts>> GetOrderedProducts(int orderId)

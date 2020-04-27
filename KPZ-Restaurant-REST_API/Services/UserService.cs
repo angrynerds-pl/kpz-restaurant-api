@@ -18,8 +18,6 @@ namespace KPZ_Restaurant_REST_API.Services
     {
         private IUsersRepository _userRepo;
 
-        private static int nextRestaurantId = 0;
-
         private String CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>

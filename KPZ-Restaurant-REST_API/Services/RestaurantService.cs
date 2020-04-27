@@ -8,8 +8,6 @@ namespace KPZ_Restaurant_REST_API.Services
     {
         private IRestaurantRepository _restaurantRepo;
 
-        private static int nextRestaurantId = 0;
-
         public RestaurantService(IRestaurantRepository restaurantRepo)//, IRestaurantGeneric<User> genericRepo)
         {
             _restaurantRepo = restaurantRepo;

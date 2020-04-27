@@ -29,11 +29,11 @@ namespace KPZ_Restaurant_REST_API.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet]
+        [HttpGet("{restaurantId}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders(int restaurantId)
         {
-            var orders = await _orderService.GetAllOrders();
+            var orders = await _orderService.GetAllOrders(restaurantId);
             return Ok(orders);
         }
 
