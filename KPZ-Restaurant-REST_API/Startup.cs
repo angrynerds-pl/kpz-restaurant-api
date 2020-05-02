@@ -39,6 +39,13 @@ namespace KPZ_Restaurant_REST_API
             var password = Configuration["DBPassword"] ?? "kpz-restaurant-passw0rd";//"kpz-passw0rd";
             var database = Configuration["Database"] ?? "kpz_restaurant";
 
+            services.AddCors(options =>
+                     {
+                         options.AddPolicy("CorsPolicy",
+                             builder => builder.AllowAnyOrigin()
+                             .AllowAnyMethod()
+                             .AllowAnyHeader());
+                     });
 
             services.AddDbContext<RestaurantContext>(options =>
                options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}")
@@ -75,7 +82,7 @@ namespace KPZ_Restaurant_REST_API
             {
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });
-         
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,6 +92,8 @@ namespace KPZ_Restaurant_REST_API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
 
