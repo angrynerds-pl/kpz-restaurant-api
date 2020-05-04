@@ -72,7 +72,7 @@ namespace KPZ_Restaurant_REST_API.Services
         {
             var waiterAlreadyRegistered = await _userRepo.CheckIfPresent(newWaiter);
 
-            if (!waiterAlreadyRegistered)
+            if (!waiterAlreadyRegistered && (newWaiter.Rights != UserType.HEAD_WAITER || newWaiter.Rights != UserType.WAITER))
             {
                 await _userRepo.Add(newWaiter);
                 await _userRepo.SaveAsync();
@@ -120,6 +120,25 @@ namespace KPZ_Restaurant_REST_API.Services
         public async Task<User> GetById(int id)
         {
             return await _userRepo.GetById(id);
+        }
+
+        public Task<IEnumerable<User>> GetAllCooks()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<User> AddNewCook(User user)
+        {
+            var cookAlreadyRegistered = await _userRepo.CheckIfPresent(user);
+
+            if (!cookAlreadyRegistered && user.Rights == UserType.COOK)
+            {
+                await _userRepo.Add(user);
+                await _userRepo.SaveAsync();
+                return user;
+            }
+            else
+                return null;
         }
     }
 }
