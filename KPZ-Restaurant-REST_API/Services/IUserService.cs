@@ -18,5 +18,7 @@ namespace KPZ_Restaurant_REST_API.Services
         Task<IEnumerable<User>> GetAllUsers();
         Task<IEnumerable<User>> GetAllWaiters();
         Task<User> GetById(int id);
+        Task<IEnumerable<User>> GetAllCooks();
+        Task<User> AddNewCook(User user);
     }
 }
