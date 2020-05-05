@@ -8,6 +8,7 @@ namespace KPZ_Restaurant_REST_API.Services
     {
         Task<Table> UpdateTable(int id, Table table);
         Task<IList<Table>> GetAllTables();
+        Task<IEnumerable<Table>> GetAllTablesByRoomId(int roomId);
         Task<Table> AddNewTable(Table table);
 
     } 

@@ -28,6 +28,17 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(tables);
         }
 
+        [HttpGet("{roomId}")]
+        public async Task<ActionResult<IEnumerable<Table>>> GetAllTablesByRoomId(int roomId)
+        {
+            var tables = await _tableService.GetAllTablesByRoomId(roomId);
+
+            if (tables != null)
+                return Ok(tables);
+            else
+                return NotFound(tables);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Table>> AddTable([FromBody] Table table)
         {
