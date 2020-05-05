@@ -59,7 +59,8 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetRecentOrders()
         {
-            
+            //TO DO
+            //Implement recent orders
             return Ok(await _orderService.GetAllOrders(1));
         }
 

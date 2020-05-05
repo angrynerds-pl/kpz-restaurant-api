@@ -34,7 +34,7 @@ namespace KPZ_Restaurant_REST_API.Models
                 context.Restaurants.AddRange(
                    mcdonalds
                );
-            context.SaveChanges();
+                context.SaveChanges();
 
             }
 
@@ -44,7 +44,7 @@ namespace KPZ_Restaurant_REST_API.Models
                 context.Rooms.AddRange(
                    new Room() { RestaurantId = mcdonalds.Id, Name = "Sala 1", Rows = 3, Columns = 3 }
                );
-            context.SaveChanges();
+                context.SaveChanges();
 
             }
 
@@ -60,7 +60,7 @@ namespace KPZ_Restaurant_REST_API.Models
                        RoomId = context.Rooms.FirstOrDefault().Id,
                        X = 0,
                        Y = 0
-                    }
+                   }
                );
 
             }
@@ -74,7 +74,7 @@ namespace KPZ_Restaurant_REST_API.Models
                     Name = "Burgers"
                 }
                );
-            context.SaveChanges();
+                context.SaveChanges();
 
             }
 
@@ -86,7 +86,7 @@ namespace KPZ_Restaurant_REST_API.Models
                   new Product() { RestaurantId = mcdonalds.Id, Name = "McRoyal", Price = 13.99M, CategoryId = context.Categories.FirstOrDefault().Id }
                );
 
-            context.SaveChanges();
+                context.SaveChanges();
 
             }
 
@@ -101,7 +101,25 @@ namespace KPZ_Restaurant_REST_API.Models
                    new User() { FirstName = "Dariusz", LastName = "Caban", Username = "dcaban", Password = "łyndołs", Rights = UserType.WAITER, RestaurantId = mcdonalds.Id }
                );
 
-            context.SaveChanges();
+                context.SaveChanges();
+            }
+
+            if (!context.Orders.Any())
+            {
+                context.Orders.AddRange(
+                    new Order() { RestaurantId = mcdonalds.Id, TableId = context.Tables.FirstOrDefault().Id, WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.WAITER).Id, OrderDate = DateTime.Now }
+                );
+
+                context.SaveChanges();
+            }
+
+            if (!context.OrderedProducts.Any())
+            {
+
+                context.OrderedProducts.AddRange(
+                    new OrderedProducts() { OrderId = context.Orders.FirstOrDefault().Id, ProductId = context.Products.FirstOrDefault().Id, Status = "READY" }
+                );
+                context.SaveChanges();
             }
 
 
