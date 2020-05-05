@@ -28,6 +28,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
+            model.Password = PasswordHasher.HashPassword(model.Password);
             var restaurant = await _restaurantService.AddRestaurant(model);
             var newManager = await _userService.AddNewManager(model, restaurant.Id);
 

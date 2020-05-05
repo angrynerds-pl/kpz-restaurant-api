@@ -55,7 +55,7 @@ namespace KPZ_Restaurant_REST_API.Services
         public async Task<string> AuthenticateUser(LoginModel model)
         {
             var user = await _userRepo.FindOne(user => user.Username == model.Username);
-            if (user != null && user.Password == model.Password) //TODO Hash passwords
+            if (user != null && PasswordHasher.ComparePassword(model.Password, user.Password)) //TODO Hash passwords
                 return CreateToken(user);
             else
                 return null;

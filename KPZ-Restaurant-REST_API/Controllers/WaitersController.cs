@@ -65,7 +65,11 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (!checkIfInRole("ADMIN"))
                 return Unauthorized();
 
+            user.Password = PasswordHasher.HashPassword(user.Password);
+
             var addedUser = await _userService.AddNewWaiter(user);
+
+            
 
             if (addedUser != null)
                 return Ok(addedUser);
