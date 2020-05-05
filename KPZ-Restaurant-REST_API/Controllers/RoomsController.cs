@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,14 +18,35 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         private IRoomService _roomService;
 
+        private bool CheckIfInRole(string requiredRole)
+        {
+            var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+
+            if (role != requiredRole)
+                return false;
+            else
+                return true;
+        }
+
         public RoomsController(IRoomService roomService)
         {
             _roomService = roomService;
         }
 
-        [HttpGet("{restaurantId}")]
-        public async Task<ActionResult<IEnumerable<Room>>> GetAllRooms(int restaurantId)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Room>>> GetAllRooms()
         {
+            int restaurantId;
+            try
+            {
+                restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            }
+            catch (FormatException e)
+            {
+                restaurantId = 0;
+                Console.WriteLine(e.Message);
+            }
+
             var rooms = await _roomService.GetAllRooms(restaurantId);
             return Ok(rooms);
         }
