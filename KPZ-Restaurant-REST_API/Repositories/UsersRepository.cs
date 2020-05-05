@@ -27,7 +27,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<List<User>> GetAllByRights(UserType rights)
         {    
-            return await _context.Users.Where( x => x.Rights == rights ).ToListAsync(); 
+            return await _context.Users.Where( x => x.Rights == rights ).Include(u => u.Restaurant).ToListAsync(); 
         }
     }
 }

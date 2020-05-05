@@ -39,7 +39,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             int restaurantId;
             try
             {
-                restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
             }
             catch (FormatException e)
             {
