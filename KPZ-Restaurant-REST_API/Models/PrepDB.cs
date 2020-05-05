@@ -42,10 +42,9 @@ namespace KPZ_Restaurant_REST_API.Models
             if (!context.Rooms.Any())
             {
                 context.Rooms.AddRange(
-                   new Room() { RestaurantId = mcdonalds.Id, Name = "Sala 1", Rows = 3, Columns = 3 }
+                   new Room() { RestaurantId = mcdonalds.Id, Restaurant=context.Restaurants.FirstOrDefault() ,Name = "Sala 1", Rows = 3, Columns = 3 }
                );
                 context.SaveChanges();
-
             }
 
             //Add tables
