@@ -9,7 +9,7 @@ namespace KPZ_Restaurant_REST_API
 {
     public sealed class PasswordHasher
         {
-           //TODO Implement password hasher
+           
             
         }
 }
