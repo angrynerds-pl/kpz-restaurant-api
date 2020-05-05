@@ -29,11 +29,15 @@ namespace KPZ_Restaurant_REST_API.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet("{restaurantId}")]
+        [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders(int restaurantId)
+        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
         {
-            var orders = await _orderService.GetAllOrders(restaurantId);
+            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
+                return Unauthorized();
+
+            var restaurantId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var orders = await _orderService.GetAllOrders(int.Parse(restaurantId));
             return Ok(orders);
         }
 
@@ -41,6 +45,9 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> GetOrderedProducts(int orderId)
         {
+            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
+                return Unauthorized();
+
             var orderedProducts = await _orderService.GetOrderedProducts(orderId);
             if (orderedProducts != null)
                 return Ok(orderedProducts);
@@ -48,11 +55,19 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(orderedProducts);
         }
 
+        [HttpGet("recent")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Order>>> GetRecentOrders()
+        {
+            
+            return Ok(await _orderService.GetAllOrders(1));
+        }
+
         [HttpPost("products")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> AddProductsToOrder([FromBody] List<OrderedProducts> orderedProducts)
         {
-            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER"))
+            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
                 return Unauthorized();
 
             var products = await _orderService.AddOrderedProducts(orderedProducts);
@@ -67,6 +82,9 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<IActionResult> CreateNewOrder([FromBody] Order order)
         {
+            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
+                return Unauthorized();
+
             var createdOrder = await _orderService.CreateNewOrder(order);
 
             if (createdOrder != null)

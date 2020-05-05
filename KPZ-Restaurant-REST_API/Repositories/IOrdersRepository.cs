@@ -8,6 +8,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface IOrdersRepository: IRestaurantGeneric<Order>
     {
+        Task<IEnumerable<Order>> GetAllOrders(int restaurantId);
         Task<bool> OrderCorrect(Order order);
     }
 }
