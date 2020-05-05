@@ -79,9 +79,10 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<ITablesRepository, TablesRepository>();
             services.AddScoped<ITableService, TableService>();
 
-            services.AddControllers().AddJsonOptions(options =>
+            services.AddControllers().AddNewtonsoftJson(options =>
             {
-                options.JsonSerializerOptions.IgnoreNullValues = true;
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
 
         }

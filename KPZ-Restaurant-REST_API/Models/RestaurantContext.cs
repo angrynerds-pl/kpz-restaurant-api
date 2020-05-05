@@ -10,44 +10,9 @@ namespace KPZ_Restaurant_REST_API.Models
     {
         public RestaurantContext(DbContextOptions<RestaurantContext> options) : base(options)
         {
-            
+
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
-            modelBuilder.Entity(typeof(Order), b =>
-             {
-                 b.HasOne(typeof(Restaurant), "Restaurant")
-                    .WithMany()
-                    .HasForeignKey("RestaurantId")
-                    .OnDelete(DeleteBehavior.NoAction);
-             });
-
-             modelBuilder.Entity(typeof(Product), b =>
-             {
-                 b.HasOne(typeof(Restaurant), "Restaurant")
-                    .WithMany()
-                    .HasForeignKey("RestaurantId")
-                    .OnDelete(DeleteBehavior.NoAction);
-             });
-
-             modelBuilder.Entity(typeof(Room), b =>
-             {
-                 b.HasOne(typeof(Restaurant), "Restaurant")
-                    .WithMany()
-                    .HasForeignKey("RestaurantId")
-                    .OnDelete(DeleteBehavior.NoAction);
-             });
-
-             modelBuilder.Entity(typeof(User), b =>
-             {
-                 b.HasOne(typeof(Restaurant), "Restaurant")
-                    .WithMany()
-                    .HasForeignKey("RestaurantId")
-                    .OnDelete(DeleteBehavior.NoAction);
-             });
-        }
 
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Table> Tables { get; set; }
