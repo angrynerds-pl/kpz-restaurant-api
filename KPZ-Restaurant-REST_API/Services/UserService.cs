@@ -25,7 +25,7 @@ namespace KPZ_Restaurant_REST_API.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Rights.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.RestaurantId.ToString())
+                new Claim("Restaurant", user.RestaurantId.ToString())
             };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8

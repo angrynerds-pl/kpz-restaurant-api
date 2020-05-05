@@ -36,7 +36,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
                 return Unauthorized();
 
-            var restaurantId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var restaurantId = User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value;
             var orders = await _orderService.GetAllOrders(int.Parse(restaurantId));
             return Ok(orders);
         }
