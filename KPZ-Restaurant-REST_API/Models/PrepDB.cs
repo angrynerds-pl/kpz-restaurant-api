@@ -60,7 +60,7 @@ namespace KPZ_Restaurant_REST_API.Models
                        RoomId = context.Rooms.FirstOrDefault().Id,
                        X = 0,
                        Y = 0
-                   }
+                    }
                );
 
             }
@@ -103,6 +103,7 @@ namespace KPZ_Restaurant_REST_API.Models
 
             context.SaveChanges();
             }
+
 
         }
     }
