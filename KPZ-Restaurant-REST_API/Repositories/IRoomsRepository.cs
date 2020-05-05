@@ -8,6 +8,6 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface IRoomsRepository : IRestaurantGeneric<Room>
     {
-
+        Task<bool> RoomCorrect(Room room);
     }
 }

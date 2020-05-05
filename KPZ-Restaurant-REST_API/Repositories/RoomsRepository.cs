@@ -1,4 +1,5 @@
 ﻿using KPZ_Restaurant_REST_API.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,11 @@ namespace KPZ_Restaurant_REST_API.Repositories
         {
             _context = context;
         }
+        public async Task<bool> RoomCorrect(Room room)
+        {
+            return await _context.Set<Restaurant>().AnyAsync(r => r.Id == room.RestaurantId);
+        }
+
     }
 
 }
