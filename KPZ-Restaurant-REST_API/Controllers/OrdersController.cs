@@ -15,7 +15,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
     {
         private IOrderService _orderService;
 
-        private bool checkIfInRole(string requiredRole)
+        private bool CheckIfInRole(string requiredRole)
         {
             var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
 
@@ -33,7 +33,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
         {
-            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
             var restaurantId = User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value;
@@ -45,7 +45,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> GetOrderedProducts(int orderId)
         {
-            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
             var orderedProducts = await _orderService.GetOrderedProducts(orderId);
@@ -68,7 +68,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> AddProductsToOrder([FromBody] List<OrderedProducts> orderedProducts)
         {
-            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
             var products = await _orderService.AddOrderedProducts(orderedProducts);
@@ -83,7 +83,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<IActionResult> CreateNewOrder([FromBody] Order order)
         {
-            if (!checkIfInRole("HEAD_WAITER") && !checkIfInRole("WAITER") && !checkIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
             var createdOrder = await _orderService.CreateNewOrder(order);

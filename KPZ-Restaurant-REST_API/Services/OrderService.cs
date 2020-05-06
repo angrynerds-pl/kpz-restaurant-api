@@ -26,9 +26,7 @@ namespace KPZ_Restaurant_REST_API.Services
                 return newOrder;
             }
             else
-            {
                 return null;
-            }
         }
 
         public async Task<IEnumerable<OrderedProducts>> AddOrderedProducts(List<OrderedProducts> orderedProducts)
