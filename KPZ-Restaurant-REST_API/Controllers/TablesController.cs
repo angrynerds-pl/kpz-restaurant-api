@@ -89,7 +89,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return Ok(updatedTable);
             else
                 return NotFound(updatedTable);
-
         }
 
     }

@@ -105,7 +105,7 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public async Task<IEnumerable<User>> GetAllWaiters()
         {
-            var waiters = await _userRepo.GetAllByRights(UserType.WAITER); //I assumed waiters are marked as 1. TODO Implement an enum to handle user rights
+            var waiters = await _userRepo.GetAllByRights(UserType.WAITER);
             var headWaiter = await _userRepo.GetAllByRights(UserType.HEAD_WAITER);
             waiters.AddRange(headWaiter);
 
@@ -114,8 +114,7 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            var users = await _userRepo.GetAll();
-            return users;
+            return await _userRepo.GetAll();
         }
 
         public async Task<User> GetById(int id)
@@ -123,9 +122,9 @@ namespace KPZ_Restaurant_REST_API.Services
             return await _userRepo.GetById(id);
         }
 
-        public Task<IEnumerable<User>> GetAllCooks()
+        public async Task<IEnumerable<User>> GetAllCooks()
         {
-            throw new NotImplementedException();
+            return await _userRepo.GetAllByRights(UserType.COOK);
         }
 
         public async Task<User> AddNewCook(User user)
