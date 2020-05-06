@@ -9,6 +9,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
     public interface IOrderedProductsRepository : IRestaurantGeneric<OrderedProducts>
     {
         Task<bool> OrderedProductCorrect(OrderedProducts orderedProduct);
-        Task<IList<OrderedProducts>> GetOrderedProducts(int orderId); 
+        Task<IList<OrderedProducts>> GetOrderedProducts(int orderId);
+        Task<OrderedProducts> UpdateOrderedProduct(OrderedProducts orderedProduct);
     }
 }

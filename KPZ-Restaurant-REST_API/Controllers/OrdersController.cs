@@ -80,6 +80,21 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(products);
         }
 
+        [HttpPut("products")]
+        [Authorize]
+        public async Task<ActionResult<OrderedProducts>> UpdateOrderedProduct([FromBody] OrderedProducts orderedProduct)
+        {
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER") && !CheckIfInRole("COOK"))
+                return Unauthorized();
+
+            var products = await _orderService.UpdateOrderedProduct(orderedProduct);
+
+            if (products != null)
+                return Ok(products);
+            else
+                return NotFound(products);
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateNewOrder([FromBody] Order order)
