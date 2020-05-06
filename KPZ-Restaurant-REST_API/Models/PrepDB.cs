@@ -175,13 +175,13 @@ namespace KPZ_Restaurant_REST_API.Models
             if (!context.Products.Any())
             {
                 context.Products.AddRange(
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Big Mac", Price = 12.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "McRoyal", Price = 13.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Hamburger", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Cheeseburger", Price = 5.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "McWrap", Price = 15.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "WRAPS").Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Medium Fries", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "FRIES").Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Small Fries", Price = 3.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "FRIES").Id }
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Big Mac", Price = 12.99M, CategoryId = context.Categories.FirstOrDefault(c => c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "McRoyal", Price = 13.99M, CategoryId = context.Categories.FirstOrDefault(c => c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Hamburger", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault(c => c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Cheeseburger", Price = 5.99M, CategoryId = context.Categories.FirstOrDefault(c => c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "McWrap", Price = 15.99M, CategoryId = context.Categories.FirstOrDefault(c => c.Name == "WRAPS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Medium Fries", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault(c => c.Name == "FRIES").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Small Fries", Price = 3.99M, CategoryId = context.Categories.FirstOrDefault(c => c.Name == "FRIES").Id }
                );
 
                 context.SaveChanges();
@@ -211,7 +211,7 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(1).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.WAITER).Id,
                         OrderDate = DateTime.Now,
-                        // Comment = "na szybko"
+                        Note = "na szybko"
                     },
                     new Order()
                     {
@@ -219,7 +219,7 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(2).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.WAITER).Id,
                         OrderDate = DateTime.Now,
-                        // Comment = "bez pośpiechu"
+                        Note = "bez pośpiechu"
                     },
                     new Order()
                     {
@@ -227,7 +227,7 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(3).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.WAITER).Id,
                         OrderDate = DateTime.Now,
-                        // Comment = "weganie, tfu"
+                        Note = "weganie, tfu"
                     },
                     new Order()
                     {
@@ -235,7 +235,7 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(4).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.HEAD_WAITER).Id,
                         OrderDate = DateTime.Now,
-                        // Comment = "przynieść krzesło dla bachora"
+                        Note = "przynieść krzesło dla bachora"
                     },
                     new Order()
                     {
@@ -243,61 +243,61 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(1).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.HEAD_WAITER).Id,
                         OrderDate = DateTime.Now,
-                        // Comment = "xD"
+                        Note = "xD"
                     }
                 );
 
                 context.SaveChanges();
             }
 
-            // if (!context.OrderedProducts.Any())
-            // {
-            //     context.Set<OrderedProducts>().AddRange(
-            //         new OrderedProducts()
-            //         {
-            //             OrderId = 1,
-            //             ProductId = context.Products.FirstOrDefault(p => p.Name == "Hamburger").Id,
-            //             Status = "READY"
-            //         },
-            //         new OrderedProducts()
-            //         {
-            //             OrderId = 1,
-            //             ProductId = context.Products.FirstOrDefault(p => p.Name == "Medium Fries").Id,
-            //             Status = "IN_PROGRESS"
-            //         },
-            //         new OrderedProducts()
-            //         {
-            //             OrderId = 1,
-            //             ProductId = context.Products.FirstOrDefault(p => p.Name == "McWrap").Id,
-            //             Status = "IN_PROGRESS"
-            //         },
-            //         new OrderedProducts()
-            //         {
-            //             OrderId = 1,
-            //             ProductId = context.Products.FirstOrDefault(p => p.Name == "BigMac").Id,
-            //             Status = "IN_PROGRESS"
-            //         },
-            //         new OrderedProducts()
-            //         {
-            //             OrderId = 3,
-            //             ProductId = context.Products.FirstOrDefault(p => p.Name == "McRoyal").Id,
-            //             Status = "IN_PROGRESS"
-            //         },
-            //         new OrderedProducts()
-            //         {
-            //             OrderId = 4,
-            //             ProductId = context.Products.FirstOrDefault(p => p.Name == "Hamburger").Id,
-            //             Status = "READY"
-            //         },
-            //         new OrderedProducts()
-            //         {
-            //             OrderId = 4,
-            //             ProductId = context.Products.FirstOrDefault(p => p.Name == "Small Fries").Id,
-            //             Status = "READY"
-            //         }
-            //     );
-            //     context.SaveChanges();
-            // }
+            if (!context.OrderedProducts.Any())
+            {
+                context.OrderedProducts.AddRange(
+                      new OrderedProducts()
+                      {
+                          OrderId = 1,
+                          ProductId = context.Products.FirstOrDefault(p => p.Name == "Hamburger").Id,
+                          Status = "READY"
+                      },
+                      new OrderedProducts()
+                      {
+                          OrderId = 1,
+                          ProductId = context.Products.FirstOrDefault(p => p.Name == "Medium Fries").Id,
+                          Status = "IN_PROGRESS"
+                      },
+                      new OrderedProducts()
+                      {
+                          OrderId = 1,
+                          ProductId = context.Products.FirstOrDefault(p => p.Name == "McWrap").Id,
+                          Status = "IN_PROGRESS"
+                      },
+                      new OrderedProducts()
+                      {
+                          OrderId = 1,
+                          ProductId = context.Products.FirstOrDefault(p => p.Name == "Big Mac").Id,
+                          Status = "IN_PROGRESS"
+                      },
+                      new OrderedProducts()
+                      {
+                          OrderId = 3,
+                          ProductId = context.Products.FirstOrDefault(p => p.Name == "McRoyal").Id,
+                          Status = "IN_PROGRESS"
+                      },
+                      new OrderedProducts()
+                      {
+                          OrderId = 4,
+                          ProductId = context.Products.FirstOrDefault(p => p.Name == "Hamburger").Id,
+                          Status = "READY"
+                      },
+                      new OrderedProducts()
+                      {
+                          OrderId = 4,
+                          ProductId = context.Products.FirstOrDefault(p => p.Name == "Small Fries").Id,
+                          Status = "READY"
+                      }
+                  );
+                context.SaveChanges();
+            }
 
 
         }

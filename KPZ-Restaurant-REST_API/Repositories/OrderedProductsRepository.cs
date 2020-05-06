@@ -18,7 +18,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
         
         public async Task<IList<OrderedProducts>> GetOrderedProducts(int orderId)
         {
-            return await _context.OrderedProducts.Where(o => o.OrderId == orderId).Include(o => o.Order).Include(o => o.Product).ToListAsync();
+            return await _context.OrderedProducts.Where(o => o.OrderId == orderId).Include(o => o.Product).ToListAsync();
         }
         
         public async Task<bool> OrderedProductCorrect(OrderedProducts orderedProduct)
