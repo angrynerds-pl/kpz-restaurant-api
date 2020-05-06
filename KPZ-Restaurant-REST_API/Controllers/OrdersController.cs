@@ -34,7 +34,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER") && !CheckIfInRole("COOK"))
                 return Unauthorized();
 
             var restaurantId = User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value;
@@ -46,7 +46,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> GetOrderedProducts(int orderId)
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER") && !CheckIfInRole("COOK"))
                 return Unauthorized();
 
             var orderedProducts = await _orderService.GetOrderedProducts(orderId);
@@ -69,7 +69,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> AddProductsToOrder([FromBody] List<OrderedProducts> orderedProducts)
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER") && !CheckIfInRole("COOK"))
                 return Unauthorized();
 
             var products = await _orderService.AddOrderedProducts(orderedProducts);
@@ -84,7 +84,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<IActionResult> CreateNewOrder([FromBody] Order order)
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER") && !CheckIfInRole("COOK"))
                 return Unauthorized();
 
             var restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
