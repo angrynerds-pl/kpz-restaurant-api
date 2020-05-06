@@ -28,7 +28,8 @@ namespace KPZ_Restaurant_REST_API.Services
                 await _tablesRepository.Add(table);
                 await _tablesRepository.SaveAsync();
                 return table;
-            } else
+            }
+            else
                 return null;
 
         }
@@ -41,6 +42,18 @@ namespace KPZ_Restaurant_REST_API.Services
         public async Task<Table> GetTableById(int id)
         {
             return await _tablesRepository.GetTableById(id);
+        }
+
+        public async Task<Table> RemoveTableById(int id)
+        {
+            var removedTable = _tablesRepository.DeleteById(id);
+            if (removedTable != null)
+            {
+                await _tablesRepository.SaveAsync();
+                return removedTable;
+            }
+            else
+                return null;
         }
 
         public async Task<Table> UpdateTable(int id, Table table)

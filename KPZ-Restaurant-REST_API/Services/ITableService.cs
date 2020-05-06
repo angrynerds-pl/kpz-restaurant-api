@@ -10,6 +10,7 @@ namespace KPZ_Restaurant_REST_API.Services
         Task<Table> GetTableById(int id);
         Task<IEnumerable<Table>> GetAllTablesByRoomId(int roomId);
         Task<Table> AddNewTable(Table table);
+        Task<Table> RemoveTableById(int id);
 
     } 
 }

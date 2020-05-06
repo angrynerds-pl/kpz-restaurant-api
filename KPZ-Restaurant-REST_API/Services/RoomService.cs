@@ -30,10 +30,19 @@ namespace KPZ_Restaurant_REST_API.Services
                 return newRoom;
             }
             else
-            {
                 return null;
-            }
         }
 
+        public async Task<Room> DeleteRoomById(int roomId)
+        {
+            var deletedRoom = _roomsRepo.DeleteById(roomId);
+            if(deletedRoom != null) 
+            {
+                await _roomsRepo.SaveAsync();
+                return deletedRoom;
+            }
+            else
+                return null;
+        }
     }
 }

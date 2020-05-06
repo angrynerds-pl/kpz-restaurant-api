@@ -46,6 +46,21 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(table);
         }
 
+        [HttpDelete("{tableId}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Table>>> RemoveTableById(int tableId)
+        {
+            if (!CheckIfInRole("MANAGER"))
+                return Unauthorized();
+
+            var table = await _tableService.RemoveTableById(tableId);
+
+            if (table != null)
+                return Ok(table);
+            else
+                return NotFound(table);
+        }
+
         [HttpGet("room/{roomId}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<Table>>> GetAllTablesByRoomId(int roomId)
@@ -90,6 +105,8 @@ namespace KPZ_Restaurant_REST_API.Controllers
             else
                 return NotFound(updatedTable);
         }
+
+        
 
     }
 }

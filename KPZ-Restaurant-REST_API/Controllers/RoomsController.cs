@@ -15,7 +15,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
     [ApiController]
     public class RoomsController : ControllerBase
     {
-
         private IRoomService _roomService;
 
         private bool CheckIfInRole(string requiredRole)
@@ -37,22 +36,14 @@ namespace KPZ_Restaurant_REST_API.Controllers
         public async Task<ActionResult<IEnumerable<Room>>> GetAllRooms()
         {
             int restaurantId;
-            try
-            {
-                restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
-            }
-            catch (FormatException e)
-            {
-                restaurantId = 0;
-                Console.WriteLine(e.Message);
-            }
+            restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
 
             var rooms = await _roomService.GetAllRooms(restaurantId);
             return Ok(rooms);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNewRoom([FromBody] Room room)
+        public async Task<ActionResult<Room>> CreateNewRoom([FromBody] Room room)
         {
             var createdRoom = await _roomService.CreateNewRoom(room);
 
@@ -60,6 +51,17 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return Ok(createdRoom);
             else
                 return BadRequest(createdRoom);
+        }
+
+        [HttpDelete("{roomId}")]
+        public async Task<ActionResult<Room>> DeleteRoomById(int roomId)
+        {
+            var removedRoom = await _roomService.DeleteRoomById(roomId);
+
+            if (removedRoom != null)
+                return Ok(removedRoom);
+            else
+                return NotFound(removedRoom);
         }
 
     }
