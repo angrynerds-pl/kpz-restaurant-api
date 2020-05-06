@@ -35,7 +35,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetAllWaiters()
         {
-            if (!checkIfInRole("ADMIN"))
+            if (!checkIfInRole("MANAGER"))
                 return Unauthorized();
 
             var waiters = await _userService.GetAllWaiters();
@@ -47,7 +47,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<User>> GetWaiter(int id)
         {
-            if (!checkIfInRole("ADMIN"))
+            if (!checkIfInRole("MANAGER"))
                 return Unauthorized();
 
             var user = await _userService.GetById(id);
@@ -62,7 +62,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<IActionResult> AddNewWaiter([FromBody] User user)
         {
-            if (!checkIfInRole("ADMIN"))
+            if (!checkIfInRole("MANAGER"))
                 return Unauthorized();
 
             user.Password = PasswordHasher.HashPassword(user.Password);

@@ -8,5 +8,6 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface ITablesRepository : IRestaurantGeneric<Table>
     {
+        Task<Table> GetTableById(int id);
     }
 }

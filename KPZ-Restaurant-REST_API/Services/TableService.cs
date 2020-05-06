@@ -33,14 +33,14 @@ namespace KPZ_Restaurant_REST_API.Services
 
         }
 
-        public async Task<IList<Table>> GetAllTables()
-        {
-            return await _tablesRepository.GetAll();
-        }
-
         public async Task<IEnumerable<Table>> GetAllTablesByRoomId(int roomId)
         {
             return await _tablesRepository.GetWhere(t => t.RoomId == roomId);
+        }
+
+        public async Task<Table> GetTableById(int id)
+        {
+            return await _tablesRepository.GetTableById(id);
         }
 
         public async Task<Table> UpdateTable(int id, Table table)
