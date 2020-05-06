@@ -93,7 +93,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         [HttpGet("categories")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories([FromBody] Category category)
+        public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories()
         {
             if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
                 return Unauthorized();
