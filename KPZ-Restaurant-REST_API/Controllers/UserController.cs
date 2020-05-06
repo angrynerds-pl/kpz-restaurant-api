@@ -13,7 +13,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
     [Route("api/[controller]")]
     public class UserController: ControllerBase
     {
-
         private IUserService _userService;
 
         public UserController(IUserService userService)
