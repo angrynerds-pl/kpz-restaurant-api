@@ -69,8 +69,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
             var addedUser = await _userService.AddNewWaiter(user);
 
-            
-
             if (addedUser != null)
                 return Ok(addedUser);
             else
