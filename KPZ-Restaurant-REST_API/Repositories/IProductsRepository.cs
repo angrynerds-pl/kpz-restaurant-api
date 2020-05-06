@@ -8,5 +8,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface IProductsRepository : IRestaurantGeneric<Product>
     {
+        Task<IEnumerable<Product>> GetAllProducts(int restaurantId);
+        Task<bool> ProductCorrect(Product product, Category category);
     }
 }

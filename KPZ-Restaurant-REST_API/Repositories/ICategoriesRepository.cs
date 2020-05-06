@@ -8,5 +8,8 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface ICategoriesRepository: IRestaurantGeneric<Category>
     {
+        Task<bool> CategoryCorrect(Category category);
+        Task<IEnumerable<Category>> GetAllCategories(int restaurantId); 
+        Task<Category> GetCategoryByName(string categoryName);
     }
 }

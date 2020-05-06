@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using KPZ_Restaurant_REST_API.Models;
+using KPZ_Restaurant_REST_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,30 +31,32 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return true;
         }
 
-        [HttpPost]
+        [HttpPost("{categoryName}")]
         [Authorize]
-        public async Task<ActionResult<Product>> CreateNewProduct([FromBody] Product product)
+        public async Task<ActionResult<Product>> CreateNewProduct([FromBody] Product product, [FromRoute] string categoryName)
         {
             if (!CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
-            var createdProduct = await _menuService.CreateNewProduct(product);
+            var restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var createdProduct = await _menuService.CreateNewProduct(product, categoryName, restaurantId);
 
             if (createdProduct != null)
                 return Ok(createdProduct);
             else
-                return BadRequest(createdProduct);
+                return NotFound(createdProduct);
         }
 
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
-             if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
-             var restaurantId = User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value;
-             return await _menuService.GetAllProducts(int.Parse(restaurantId));
+            var restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var products = await _menuService.GetAllProducts(restaurantId);
+            return Ok(products);
         }
 
         [HttpPost("categories")]
@@ -62,7 +66,8 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (!CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
-            var createdCategory = await _menuService.CreateNewCategory(category);
+            var restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var createdCategory = await _menuService.CreateNewCategory(category, restaurantId);
 
             if (createdCategory != null)
                 return Ok(createdCategory);
@@ -77,8 +82,8 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
-            var restaurantId = User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value;
-            var categories = await _menuService.GetAllCategories(int.Parse(restaurantId));
+            var restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var categories = await _menuService.GetAllCategories(restaurantId);
             return Ok(categories);
         }
 

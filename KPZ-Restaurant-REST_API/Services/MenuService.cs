@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KPZ_Restaurant_REST_API.Models;
@@ -17,7 +18,7 @@ namespace KPZ_Restaurant_REST_API.Services
             _categoriesRepo = categoriesRepo;
         }
 
-        public async Task<ActionResult<Category>> CreateNewCategory(Category category, int restaurantId)
+        public async Task<Category> CreateNewCategory(Category category, int restaurantId)
         {
             category.RestaurantId = restaurantId;
             var categoryCorrect = await _categoriesRepo.CategoryCorrect(category);
@@ -33,10 +34,11 @@ namespace KPZ_Restaurant_REST_API.Services
 
         }
 
-        public async Task<ActionResult<Product>> CreateNewProduct(Product product, int restaurantId)
+        public async Task<Product> CreateNewProduct(Product product, string categoryName, int restaurantId)
         {
             product.RestaurantId = restaurantId;
-            var productCorrect = await _productsRepo.ProductCorrect(product);
+            var categoryInDatabase = await _categoriesRepo.GetCategoryByName(categoryName);
+            var productCorrect = await _productsRepo.ProductCorrect(product, categoryInDatabase);
 
             if (productCorrect)
             {
@@ -48,14 +50,14 @@ namespace KPZ_Restaurant_REST_API.Services
                 return null;
         }
 
-        public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories(int restaurantId)
+        public async Task<IEnumerable<Category>> GetAllCategories(int restaurantId)
         {
-            throw new System.NotImplementedException();
+            return await _categoriesRepo.GetAllCategories(restaurantId);
         }
 
-        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts(int restaurantId)
+        public async Task<IEnumerable<Product>> GetAllProducts(int restaurantId)
         {
-            throw new System.NotImplementedException();
+            return await _productsRepo.GetAllProducts(restaurantId);
         }
     }
 }

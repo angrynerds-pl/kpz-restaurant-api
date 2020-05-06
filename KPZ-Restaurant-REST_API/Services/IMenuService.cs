@@ -7,9 +7,9 @@ namespace KPZ_Restaurant_REST_API.Services
 {
     public interface IMenuService
     {
-         Task<ActionResult<Product>> CreateNewProduct(Product product, int restaurantId);
-         Task<ActionResult<IEnumerable<Product>>> GetAllProducts(int restaurantId);
-         Task<ActionResult<Category>> CreateNewCategory(Category category, int restaurantId);
-         Task<ActionResult<IEnumerable<Category>>> GetAllCategories(int restaurantId);
+         Task<Product> CreateNewProduct(Product product, string categoryName, int restaurantId);
+         Task<IEnumerable<Product>> GetAllProducts(int restaurantId);
+         Task<Category> CreateNewCategory(Category category, int restaurantId);
+         Task<IEnumerable<Category>> GetAllCategories(int restaurantId);
     }
 }

@@ -100,17 +100,17 @@ namespace KPZ_Restaurant_REST_API.Models
                     new Category()
                     {
                         RestaurantId = mcdonalds.Id,
-                        Name = "Burgers"
+                        Name = "BURGERS"
                     },
                      new Category()
                      {
                          RestaurantId = mcdonalds.Id,
-                         Name = "Wraps"
+                         Name = "WRAPS"
                      },
                      new Category()
                      {
                          RestaurantId = mcdonalds.Id,
-                         Name = "Fries"
+                         Name = "FRIES"
                      }
                );
                 context.SaveChanges();
@@ -121,13 +121,13 @@ namespace KPZ_Restaurant_REST_API.Models
             if (!context.Products.Any())
             {
                 context.Products.AddRange(
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Big Mac", Price = 12.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "McRoyal", Price = 13.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Hamburger", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Cheeseburger", Price = 5.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "McWrap", Price = 15.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Medium Fries", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Small Fries", Price = 3.99M, CategoryId = context.Categories.FirstOrDefault().Id }
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Big Mac", Price = 12.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "McRoyal", Price = 13.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Hamburger", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Cheeseburger", Price = 5.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "McWrap", Price = 15.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "WRAPS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Medium Fries", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "FRIES").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Small Fries", Price = 3.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "FRIES").Id }
                );
 
                 context.SaveChanges();

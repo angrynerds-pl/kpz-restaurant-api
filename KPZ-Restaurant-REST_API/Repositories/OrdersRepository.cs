@@ -19,7 +19,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<IEnumerable<Order>> GetAllOrders(int restaurantId)
         {
-            return await _context.Set<Order>().Where(o => o.RestaurantId == restaurantId).Include(o => o.Table).ThenInclude(o => o.Room).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();//.Include("Restaurants").Include("Users").Include("Tables").ToListAsync();
+            return await _context.Set<Order>().Where(o => o.RestaurantId == restaurantId).Include(o => o.Table).ThenInclude(o => o.Room).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
 
         public async Task<bool> OrderCorrect(Order order)

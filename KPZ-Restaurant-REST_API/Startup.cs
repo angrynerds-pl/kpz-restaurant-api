@@ -48,7 +48,8 @@ namespace KPZ_Restaurant_REST_API
                      });
 
             services.AddDbContext<RestaurantContext>(options =>
-               options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}")
+               options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}"),
+                ServiceLifetime.Transient
             );
 
             //TODO: Create UnitOfWork for repositories
@@ -61,7 +62,11 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
             services.AddScoped<IRestaurantService, RestaurantService>();
-
+            services.AddScoped<ITablesRepository, TablesRepository>();
+            services.AddScoped<ITableService, TableService>();
+            services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+            services.AddScoped<IMenuService, MenuService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -76,8 +81,6 @@ namespace KPZ_Restaurant_REST_API
                     };
                 });
 
-            services.AddScoped<ITablesRepository, TablesRepository>();
-            services.AddScoped<ITableService, TableService>();
 
             services.AddControllers().AddNewtonsoftJson(options =>
             {
