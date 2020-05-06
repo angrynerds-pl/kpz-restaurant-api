@@ -47,6 +47,21 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(createdProduct);
         }
 
+        [HttpGet("{categoryName}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategoryName([FromRoute] string categoryName)
+        {
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+                return Unauthorized();
+
+            var restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var products = await _menuService.GetProductsByCategoryName(restaurantId, categoryName);
+            if (products != null)
+                return Ok(products);
+            else
+                return NotFound(products);
+        }
+
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
@@ -58,6 +73,8 @@ namespace KPZ_Restaurant_REST_API.Controllers
             var products = await _menuService.GetAllProducts(restaurantId);
             return Ok(products);
         }
+
+
 
         [HttpPost("categories")]
         [Authorize]

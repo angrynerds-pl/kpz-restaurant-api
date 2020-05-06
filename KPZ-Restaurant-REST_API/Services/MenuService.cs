@@ -59,5 +59,14 @@ namespace KPZ_Restaurant_REST_API.Services
         {
             return await _productsRepo.GetAllProducts(restaurantId);
         }
+
+        public async Task<IEnumerable<Product>> GetProductsByCategoryName(int restaurantId, string categoryName)
+        {
+            var categoryInDatabse = await _categoriesRepo.GetCategoryByName(categoryName);
+            if(categoryInDatabse == null)
+                return null;
+
+            return await _productsRepo.GetAllProductsByCategoryName(restaurantId, categoryInDatabse.Id);
+        }
     }
 }
