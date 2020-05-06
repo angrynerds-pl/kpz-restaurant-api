@@ -42,7 +42,7 @@ namespace KPZ_Restaurant_REST_API.Models
             if (!context.Rooms.Any())
             {
                 context.Rooms.AddRange(
-                   new Room() { RestaurantId = mcdonalds.Id, Restaurant = context.Restaurants.FirstOrDefault(), Name = "Sala 1", Rows = 3, Columns = 3 }
+                   new Room() { RestaurantId = mcdonalds.Id, Restaurant = context.Restaurants.FirstOrDefault(), Name = "Floor 1", Rows = 5, Columns = 4 }
                );
                 context.SaveChanges();
             }
@@ -58,7 +58,7 @@ namespace KPZ_Restaurant_REST_API.Models
                        Status = "FREE",
                        RoomId = context.Rooms.FirstOrDefault().Id,
                        X = 0,
-                       Y = 0
+                       Y = 1
                    },
                    new Table()
                    {
@@ -66,8 +66,8 @@ namespace KPZ_Restaurant_REST_API.Models
                        Seats = 4,
                        Status = "FREE",
                        RoomId = context.Rooms.FirstOrDefault().Id,
-                       X = 1,
-                       Y = 0
+                       X = 0,
+                       Y = 2
                    },
                    new Table()
                    {
@@ -75,7 +75,7 @@ namespace KPZ_Restaurant_REST_API.Models
                        Seats = 6,
                        Status = "FREE",
                        RoomId = context.Rooms.FirstOrDefault().Id,
-                       X = 2,
+                       X = 1,
                        Y = 0
                    },
                    new Table()
@@ -84,8 +84,62 @@ namespace KPZ_Restaurant_REST_API.Models
                        Seats = 4,
                        Status = "FREE",
                        RoomId = context.Rooms.FirstOrDefault().Id,
-                       X = 3,
+                       X = 2,
                        Y = 0
+                   },
+                   new Table()
+                   {
+                       Number = 5,
+                       Seats = 6,
+                       Status = "FREE",
+                       RoomId = context.Rooms.FirstOrDefault().Id,
+                       X = 1,
+                       Y = 3
+                   },
+                   new Table()
+                   {
+                       Number = 6,
+                       Seats = 4,
+                       Status = "FREE",
+                       RoomId = context.Rooms.FirstOrDefault().Id,
+                       X = 2,
+                       Y = 3
+                   },
+                   new Table()
+                   {
+                       Number = 7,
+                       Seats = 3,
+                       Status = "FREE",
+                       RoomId = context.Rooms.FirstOrDefault().Id,
+                       X = 3,
+                       Y = 1
+                   },
+                   new Table()
+                   {
+                       Number = 8,
+                       Seats = 2,
+                       Status = "FREE",
+                       RoomId = context.Rooms.FirstOrDefault().Id,
+                       X = 3,
+                       Y = 2
+                   },
+                   new Table()
+                   {
+                       Number = 9,
+                       Seats = 3,
+                       Status = "FREE",
+                       RoomId = context.Rooms.FirstOrDefault().Id,
+                       X = 4,
+                       Y = 0
+                   },
+                   new Table()
+                   {
+                       Number = 10,
+                       Seats = 4,
+                       Status = "FREE",
+                       RoomId = context.Rooms.FirstOrDefault().Id,
+                       X = 4,
+                       Y = 3
                    }
                );
                 context.SaveChanges();
