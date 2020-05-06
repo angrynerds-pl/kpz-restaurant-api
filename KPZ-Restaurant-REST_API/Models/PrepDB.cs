@@ -100,17 +100,17 @@ namespace KPZ_Restaurant_REST_API.Models
                     new Category()
                     {
                         RestaurantId = mcdonalds.Id,
-                        Name = "Burgers"
+                        Name = "BURGERS"
                     },
                      new Category()
                      {
                          RestaurantId = mcdonalds.Id,
-                         Name = "Wraps"
+                         Name = "WRAPS"
                      },
                      new Category()
                      {
                          RestaurantId = mcdonalds.Id,
-                         Name = "Fries"
+                         Name = "FRIES"
                      }
                );
                 context.SaveChanges();
@@ -121,13 +121,13 @@ namespace KPZ_Restaurant_REST_API.Models
             if (!context.Products.Any())
             {
                 context.Products.AddRange(
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Big Mac", Price = 12.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "McRoyal", Price = 13.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Hamburger", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Cheeseburger", Price = 5.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "McWrap", Price = 15.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Medium Fries", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault().Id },
-                  new Product() { RestaurantId = mcdonalds.Id, Name = "Small Fries", Price = 3.99M, CategoryId = context.Categories.FirstOrDefault().Id }
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Big Mac", Price = 12.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "McRoyal", Price = 13.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Hamburger", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Cheeseburger", Price = 5.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "BURGERS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "McWrap", Price = 15.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "WRAPS").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Medium Fries", Price = 4.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "FRIES").Id },
+                  new Product() { RestaurantId = mcdonalds.Id, Name = "Small Fries", Price = 3.99M, CategoryId = context.Categories.FirstOrDefault(c=>c.Name == "FRIES").Id }
                );
 
                 context.SaveChanges();
@@ -139,10 +139,10 @@ namespace KPZ_Restaurant_REST_API.Models
                 //Seed data
                 Console.WriteLine("Adding data to User table");
                 context.Users.AddRange(
-                   new User() { FirstName = "Janusz", LastName = "Biernat", Username = "jbiernat", Password = "architektura", Rights = UserType.MANAGER, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Dariusz", LastName = "Caban", Username = "dcaban", Password = "łyndołs", Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Jacek", LastName = "Mazurkiewicz", Username = "jmazur", Password = "mikrokontroler", Rights = UserType.COOK, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Piotr", LastName = "Patronik", Username = "pepe", Password = "przepis", Rights = UserType.HEAD_WAITER, RestaurantId = mcdonalds.Id }
+                   new User() { FirstName = "Janusz", LastName = "Biernat", Username = "jbiernat", Password = PasswordHasher.HashPassword("architektura"), Rights = UserType.MANAGER, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Dariusz", LastName = "Caban", Username = "dcaban", Password = PasswordHasher.HashPassword("łyndołs"), Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Jacek", LastName = "Mazurkiewicz", Username = "jmazur", Password = PasswordHasher.HashPassword("mikrokontroler"), Rights = UserType.COOK, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Piotr", LastName = "Patronik", Username = "pepe", Password = PasswordHasher.HashPassword("przepis"), Rights = UserType.HEAD_WAITER, RestaurantId = mcdonalds.Id }
                );
 
                 context.SaveChanges();

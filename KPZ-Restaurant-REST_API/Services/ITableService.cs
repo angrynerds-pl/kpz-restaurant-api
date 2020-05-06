@@ -7,7 +7,7 @@ namespace KPZ_Restaurant_REST_API.Services
     public interface ITableService
     {
         Task<Table> UpdateTable(int id, Table table);
-        Task<IList<Table>> GetAllTables();
+        Task<Table> GetTableById(int id);
         Task<IEnumerable<Table>> GetAllTablesByRoomId(int roomId);
         Task<Table> AddNewTable(Table table);
 
