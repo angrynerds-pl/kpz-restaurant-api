@@ -16,8 +16,9 @@ namespace KPZ_Restaurant_REST_API.Services
             _orderedProductsRepo = productsInOrderRepo;
         }
 
-        public async Task<Order> CreateNewOrder(Order newOrder)
+        public async Task<Order> CreateNewOrder(Order newOrder, int restaurantId)
         {
+            newOrder.RestaurantId = restaurantId;
             var orderCorrect = await _ordersRepo.OrderCorrect(newOrder);
             if (orderCorrect)
             {

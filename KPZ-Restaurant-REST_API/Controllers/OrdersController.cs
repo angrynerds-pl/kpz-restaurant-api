@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -86,7 +87,9 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
                 return Unauthorized();
 
-            var createdOrder = await _orderService.CreateNewOrder(order);
+            var restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+
+            var createdOrder = await _orderService.CreateNewOrder(order, restaurantId);
 
             if (createdOrder != null)
                 return Ok(createdOrder);
