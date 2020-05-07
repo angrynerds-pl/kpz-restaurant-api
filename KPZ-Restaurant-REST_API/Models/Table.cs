@@ -19,5 +19,6 @@ namespace KPZ_Restaurant_REST_API.Models
         public virtual Room Room { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        public virtual List<Order> Orders { get; set; }
     }
 }
