@@ -9,7 +9,7 @@ namespace KPZ_Restaurant_REST_API.Services
         Task<IEnumerable<Room>> GetAllRooms(int restaurantId);
 
         Task<Room> CreateNewRoom(Room newRoom);
-        Task<Room> DeleteRoomById(int roomId);
+        Task<Room> DeleteRoomById(int roomId, int restaurantId);
 
     }
 }

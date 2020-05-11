@@ -15,30 +15,22 @@ namespace KPZ_Restaurant_REST_API.Controllers
     public class MenuController : ControllerBase
     {
         private IMenuService _menuService;
+        private ISecurityService _securityService;
 
-        public MenuController(IMenuService menuService)
+        public MenuController(IMenuService menuService, ISecurityService securityService)
         {
             _menuService = menuService;
+            _securityService = securityService;
         }
-
-        private bool CheckIfInRole(string requiredRole)
-        {
-            var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-
-            if (role != requiredRole)
-                return false;
-            else
-                return true;
-        }
-
+        
         [HttpPost("{categoryName}")]
         [Authorize]
         public async Task<ActionResult<Product>> CreateNewProduct([FromBody] Product product, [FromRoute] string categoryName)
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var restaurantId = _securityService.GetRestaurantId(User);
             var createdProduct = await _menuService.CreateNewProduct(product, categoryName, restaurantId);
 
             if (createdProduct != null)
@@ -51,10 +43,10 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategoryName([FromRoute] string categoryName)
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var restaurantId = _securityService.GetRestaurantId(User);
             var products = await _menuService.GetProductsByCategoryName(restaurantId, categoryName);
             if (products != null)
                 return Ok(products);
@@ -66,10 +58,10 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var restaurantId = _securityService.GetRestaurantId(User);
             var products = await _menuService.GetAllProducts(restaurantId);
             return Ok(products);
         }
@@ -79,10 +71,10 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<Category>> CreateNewCategory([FromBody] Category category)
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var restaurantId = _securityService.GetRestaurantId(User);
             var createdCategory = await _menuService.CreateNewCategory(category, restaurantId);
 
             if (createdCategory != null)
@@ -95,10 +87,10 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories()
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
+            var restaurantId = _securityService.GetRestaurantId(User);
             var categories = await _menuService.GetAllCategories(restaurantId);
             return Ok(categories);
         }

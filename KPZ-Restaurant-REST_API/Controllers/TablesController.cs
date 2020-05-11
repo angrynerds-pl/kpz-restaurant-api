@@ -15,30 +15,23 @@ namespace KPZ_Restaurant_REST_API.Controllers
     public class TablesController : ControllerBase
     {
         private ITableService _tableService;
+        private ISecurityService _securityService;
 
-        public TablesController(ITableService tableService)
+        public TablesController(ITableService tableService, ISecurityService securityService)
         {
             _tableService = tableService;
-        }
-
-        private bool CheckIfInRole(string requiredRole)
-        {
-            var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-
-            if (role != requiredRole)
-                return false;
-            else
-                return true;
+            _securityService = securityService;
         }
 
         [HttpGet("{tableId}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<Table>>> GetTableById(int tableId)
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var table = await _tableService.GetTableById(tableId);
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var table = await _tableService.GetTableById(tableId, restaurantId);
 
             if (table != null)
                 return Ok(table);
@@ -50,10 +43,11 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Table>>> RemoveTableById(int tableId)
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var table = await _tableService.RemoveTableById(tableId);
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var table = await _tableService.RemoveTableById(tableId, restaurantId);
 
             if (table != null)
                 return Ok(table);
@@ -65,10 +59,11 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Table>>> GetAllTablesByRoomId(int roomId)
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var tables = await _tableService.GetAllTablesByRoomId(roomId);
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var tables = await _tableService.GetAllTablesByRoomId(roomId, restaurantId);
 
             if (tables != null)
                 return Ok(tables);
@@ -80,8 +75,13 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<Table>> AddTable([FromBody] Table table)
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User)
+                && !_securityService.CheckIfInRole("WAITER", User)
+                && !_securityService.CheckIfInRole("MANAGER", User)
+                && table.Room.RestaurantId != _securityService.GetRestaurantId(User))
+            {
                 return Unauthorized();
+            }
 
             var addedTable = await _tableService.AddNewTable(table);
 
@@ -95,18 +95,21 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<Table>> ChangeTableAllocation(int id, [FromBody] Table table)
         {
-            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User)
+                && !_securityService.CheckIfInRole("WAITER", User)
+                && !_securityService.CheckIfInRole("MANAGER", User))
+            {
                 return Unauthorized();
+            }
 
-            var updatedTable = await _tableService.UpdateTable(id, table);
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var updatedTable = await _tableService.UpdateTable(id, table, restaurantId);
 
             if (updatedTable != null)
                 return Ok(updatedTable);
             else
                 return NotFound(updatedTable);
         }
-
-        
 
     }
 }

@@ -18,5 +18,7 @@ namespace KPZ_Restaurant_REST_API.Models
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
         public string Status { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
     }
 }

@@ -24,6 +24,8 @@ namespace KPZ_Restaurant_REST_API.Models
         public string Note { get; set; }
         public DateTime OrderDate { get; set; }
         public virtual List<OrderedProducts> OrderedProducts {get; set;}
+        public DateTime? DeletedAt { get; set; }
+
 
     }
 }

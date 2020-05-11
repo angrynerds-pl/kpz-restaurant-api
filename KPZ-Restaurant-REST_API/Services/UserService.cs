@@ -18,55 +18,17 @@ namespace KPZ_Restaurant_REST_API.Services
     {
         private IUsersRepository _userRepo;
 
-        private String CreateToken(User user)
-        {
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Rights.ToString()),
-                new Claim("Restaurant", user.RestaurantId.ToString())
-            };
-
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes("ABCDABCDEFGHEFGH"));
-
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
-
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
-
-
-        public UserService(IUsersRepository userRepo)//, IRestaurantGeneric<User> genericRepo)
+        public UserService(IUsersRepository userRepo)
         {
             _userRepo = userRepo;
         }
 
-        public async Task<string> AuthenticateUser(LoginModel model)
-        {
-            var user = await _userRepo.FindOne(user => user.Username == model.Username);
-            if (user != null && PasswordHasher.ComparePassword(model.Password, user.Password)) //TODO Hash passwords
-                return CreateToken(user);
-            else
-                return null;
-        }
-
         public async Task<User> GetByUsername(string username)
         {
-            var users = await _userRepo.GetAllFiltered(user => user.Username == username);
+            var users = await _userRepo.GetByUsername(username);
             if (users.Count != 1)
                 return null;
-            return users[0];
+            return users.FirstOrDefault();
         }
 
         public async Task<User> AddNewWaiter(User newWaiter)
@@ -103,28 +65,28 @@ namespace KPZ_Restaurant_REST_API.Services
             return newManager;
         }
 
-        public async Task<IEnumerable<User>> GetAllWaiters()
+        public async Task<IEnumerable<User>> GetAllWaiters(int restaurantId)
         {
-            var waiters = await _userRepo.GetAllByRights(UserType.WAITER);
-            var headWaiter = await _userRepo.GetAllByRights(UserType.HEAD_WAITER);
-            waiters.AddRange(headWaiter);
+            var waiters = await _userRepo.GetAllByRights(UserType.WAITER, restaurantId);
+            var headWaiter = await _userRepo.GetAllByRights(UserType.HEAD_WAITER, restaurantId);
+            waiters.Concat(headWaiter);
 
             return waiters;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<User>> GetAllUsers(int restaurantId)
         {
-            return await _userRepo.GetAll();
+            return await _userRepo.GetAllUsers(restaurantId);
         }
 
         public async Task<User> GetById(int id)
         {
-            return await _userRepo.GetById(id);
+            return await _userRepo.GetUserById(id);
         }
 
-        public async Task<IEnumerable<User>> GetAllCooks()
+        public async Task<IEnumerable<User>> GetAllCooks(int restaurantId)
         {
-            return await _userRepo.GetAllByRights(UserType.COOK);
+            return await _userRepo.GetAllByRights(UserType.COOK, restaurantId);
         }
 
         public async Task<User> AddNewCook(User user)

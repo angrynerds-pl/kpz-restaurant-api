@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace KPZ_Restaurant_REST_API.Repositories
 {
@@ -15,19 +16,34 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context = context;
         }
 
-        public async Task<List<User>> GetAllFiltered(Func<User, bool> filter)
+        public async Task<ICollection<User>> GetAllFiltered(Expression<Func<User, bool>> predicate)
         {
-            return await _context.Users.Where(x => filter(x)).ToListAsync();
+            return await _context.Users.Where(predicate).Where(u => u.DeletedAt == null).ToListAsync();
         }
 
         public async Task<bool> CheckIfPresent(User user)
         {
-            return await _context.Set<User>().AnyAsync(u => u.Username == user.Username);
+            return await _context.Set<User>().AnyAsync(u => u.Username == user.Username && u.DeletedAt == null);
         }
 
-        public async Task<List<User>> GetAllByRights(UserType rights)
+        public async Task<ICollection<User>> GetAllByRights(UserType rights, int restaurantId)
         {    
-            return await _context.Users.Where( x => x.Rights == rights ).Include(u => u.Restaurant).ToListAsync(); 
+            return await _context.Users.Where( x => x.RestaurantId == restaurantId && x.Rights == rights && x.DeletedAt == null ).ToListAsync(); 
+        }
+
+        public async Task<ICollection<User>> GetByUsername(string username)
+        {
+            return await _context.Users.Where(u => u.Username == username && u.DeletedAt == null).ToListAsync();
+        }
+
+        public async Task<User> GetUserById(int id)
+        {
+            return await _context.Users.Where(u => u.Id == id && u.DeletedAt == null).FirstOrDefaultAsync();
+        }
+
+        public async Task<ICollection<User>> GetAllUsers(int restaurantId)
+        {
+            return await _context.Users.Where(u => u.RestaurantId == restaurantId && u.DeletedAt == null).ToListAsync();
         }
     }
 }

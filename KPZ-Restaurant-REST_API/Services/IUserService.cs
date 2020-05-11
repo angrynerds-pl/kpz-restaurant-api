@@ -13,12 +13,10 @@ namespace KPZ_Restaurant_REST_API.Services
         Task<User> AddNewManager(RegisterModel manager, int restaurantId);
 
         Task<User> GetByUsername(string username);
-
-        Task<string> AuthenticateUser(LoginModel model);
-        Task<IEnumerable<User>> GetAllUsers();
-        Task<IEnumerable<User>> GetAllWaiters();
+        Task<IEnumerable<User>> GetAllUsers(int restaurantId);
+        Task<IEnumerable<User>> GetAllWaiters(int restaurantId);
         Task<User> GetById(int id);
-        Task<IEnumerable<User>> GetAllCooks();
+        Task<IEnumerable<User>> GetAllCooks(int restaurantId);
         Task<User> AddNewCook(User user);
     }
 }

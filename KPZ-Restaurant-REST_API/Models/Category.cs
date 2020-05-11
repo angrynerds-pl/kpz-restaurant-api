@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,5 +14,7 @@ namespace KPZ_Restaurant_REST_API.Models
         [ForeignKey("RestaurantId")]
         public virtual Restaurant Restaurant { get; set; }
         public string Name { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
     }
 }

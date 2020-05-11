@@ -18,11 +18,13 @@ namespace KPZ_Restaurant_REST_API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IRestaurantService _restaurantService;
+        private readonly ISecurityService _securityService;
 
-        public LoginController(IUserService service, IRestaurantService restaurantService)
+        public LoginController(IUserService service, IRestaurantService restaurantService, ISecurityService securityService)
         {
             _userService = service;
             _restaurantService = restaurantService;
+            _securityService = securityService;
         }
 
         [HttpPost("register")]
@@ -44,7 +46,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] LoginModel model)
         {
-            var userToken = await _userService.AuthenticateUser(model);
+            var userToken = await _securityService.AuthenticateUser(model);
             if (userToken == null)
                 return BadRequest(model);
             return Ok( new { token = userToken });

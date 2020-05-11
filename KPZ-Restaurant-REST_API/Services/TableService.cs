@@ -18,12 +18,9 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public async Task<Table> AddNewTable(Table table)
         {
-            var tableInDatabase = await _tablesRepository.FindOne(t =>
-                t.Number == table.Number &&
-                t.RoomId == table.RoomId
-            );
+            var tableNotPresent = _tablesRepository.CheckIfTablePresent(table);
 
-            if (tableInDatabase == null)
+            if (tableNotPresent.Result)
             {
                 await _tablesRepository.Add(table);
                 await _tablesRepository.SaveAsync();
@@ -34,19 +31,19 @@ namespace KPZ_Restaurant_REST_API.Services
 
         }
 
-        public async Task<IEnumerable<Table>> GetAllTablesByRoomId(int roomId)
+        public async Task<IEnumerable<Table>> GetAllTablesByRoomId(int roomId, int restaurantId)
         {
-            return await _tablesRepository.GetWhere(t => t.RoomId == roomId);
+            return await _tablesRepository.GetTablesByRoomId(roomId, restaurantId);
         }
 
-        public async Task<Table> GetTableById(int id)
+        public async Task<Table> GetTableById(int id, int restaurantId)
         {
-            return await _tablesRepository.GetTableById(id);
+            return await _tablesRepository.GetTableById(id, restaurantId);
         }
 
-        public async Task<Table> RemoveTableById(int id)
+        public async Task<Table> RemoveTableById(int id, int restaurantId)
         {
-            var removedTable = _tablesRepository.DeleteById(id);
+            var removedTable = await _tablesRepository.DeleteTableById(id, restaurantId);
             if (removedTable != null)
             {
                 await _tablesRepository.SaveAsync();
@@ -56,9 +53,9 @@ namespace KPZ_Restaurant_REST_API.Services
                 return null;
         }
 
-        public async Task<Table> UpdateTable(int id, Table table)
+        public async Task<Table> UpdateTable(int id, Table table, int restaurantId)
         {
-            var entity = await _tablesRepository.FindOne(t => t.Id == id);
+            var entity = await _tablesRepository.GetTableById(id, restaurantId);
 
             if (entity != null)
             {

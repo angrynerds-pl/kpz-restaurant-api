@@ -19,30 +19,7 @@ namespace KPZ_Restaurant_REST_API.Models
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
-
-            modelBuilder.Entity<Room>()
-                .HasMany<Table>(o => o.Tables)
-                .WithOne(t => t.Room)
-                .HasForeignKey(o => o.RoomId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Order>()
-                .HasOne<Table>(o => o.Table)
-                .WithMany(t => t.Orders)
-                .HasForeignKey(o => o.TableId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            // modelBuilder.Entity<Product>()
-            //     .HasOne<Category>(p => p.Category)
-            //     .WithMany(c => c.Products)
-            //     .HasForeignKey(p => p.CategoryId)
-            //     .OnDelete(DeleteBehavior.NoAction);
-
-
-            // modelBuilder.Entity<Room>()
-            //     .Has(r => )
         }
-
 
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Table> Tables { get; set; }

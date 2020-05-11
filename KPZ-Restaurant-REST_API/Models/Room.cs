@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,5 +17,7 @@ namespace KPZ_Restaurant_REST_API.Models
         public int Rows { get; set; }
         public int Columns { get; set; }
         public virtual List<Table> Tables { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
     }
 }

@@ -53,6 +53,7 @@ namespace KPZ_Restaurant_REST_API
             );
 
             //TODO: Create UnitOfWork for repositories
+            services.AddScoped<ISecurityService, SecurityService>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoomService, RoomService>();
