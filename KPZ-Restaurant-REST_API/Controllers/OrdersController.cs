@@ -27,7 +27,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
         {
-            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
                 return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
@@ -39,7 +39,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> GetOrderedProducts(int orderId)
         {
-            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
                 return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
@@ -76,11 +76,26 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(products);
         }
 
+        [HttpPut("products")]
+        [Authorize]
+        public async Task<ActionResult<OrderedProducts>> UpdateOrderedProduct([FromBody] OrderedProducts orderedProduct)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var products = await _orderService.UpdateOrderedProduct(orderedProduct);
+
+            if (products != null)
+                return Ok(products);
+            else
+                return NotFound(products);
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateNewOrder([FromBody] Order order)
         {
-            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+            if (!CheckIfInRole("HEAD_WAITER") && !CheckIfInRole("WAITER") && !CheckIfInRole("MANAGER") && !CheckIfInRole("COOK"))
                 return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
