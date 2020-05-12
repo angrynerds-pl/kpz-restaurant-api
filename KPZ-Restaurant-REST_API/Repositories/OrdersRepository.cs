@@ -19,7 +19,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<IEnumerable<Order>> GetAllOrders(int restaurantId)
         {
-            return await _context.Set<Order>().Where(o => o.RestaurantId == restaurantId && o.DeletedAt == null).Include(o => o.Table).ThenInclude(o => o.Room).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
+            return await _context.Set<Order>().Where(o => o.RestaurantId == restaurantId && o.DeletedAt == null).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
 
         public async Task<bool> OrderCorrect(Order order)
@@ -27,6 +27,23 @@ namespace KPZ_Restaurant_REST_API.Repositories
             return await _context.Set<Table>().AnyAsync(t => t.Id == order.TableId && t.DeletedAt == null)
                 && await _context.Set<User>().AnyAsync(w => w.Id == order.WaiterId && w.DeletedAt == null)
                 && await _context.Set<Restaurant>().AnyAsync(r => r.Id == order.RestaurantId);
+        }
+
+        public async Task<Order> UpdateOrder(Order order)
+        {
+            var entity = await _context.Orders.FindAsync(order.Id);
+            if (entity != null)
+            {
+                entity.TableId = order.TableId;
+                entity.WaiterId = order.WaiterId;
+                entity.Note = order.Note;
+                entity.OrderDate = order.OrderDate;
+                _context.Orders.Update(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            else
+                return null;
         }
     }
 }

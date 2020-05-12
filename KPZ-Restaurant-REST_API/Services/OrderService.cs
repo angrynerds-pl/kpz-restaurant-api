@@ -63,9 +63,32 @@ namespace KPZ_Restaurant_REST_API.Services
                 return orderedProducts;
         }
 
-        public async Task<OrderedProducts> UpdateOrderedProduct(OrderedProducts orderedProduct)
+        public async Task<OrderedProducts> UpdateOrderedProduct(OrderedProducts orderedProduct, int restaurantId)
         {
-            return await _orderedProductsRepo.UpdateOrderedProduct(orderedProduct);
+            var orderedProductCorrect = await _orderedProductsRepo.OrderedProductCorrect(orderedProduct, restaurantId);
+            if (orderedProductCorrect)
+            {
+                await _orderedProductsRepo.UpdateOrderedProduct(orderedProduct);
+                await _orderedProductsRepo.SaveAsync();
+                return orderedProduct;
+            }
+            else
+                return null;
+
+        }
+
+        public async Task<Order> UpdateOrder(Order order, int restaurantId)
+        {
+            order.RestaurantId = restaurantId;
+            var orderCorrect = await _ordersRepo.OrderCorrect(order);
+            if (orderCorrect)
+            {
+                await _ordersRepo.UpdateOrder(order);
+                await _ordersRepo.SaveAsync();
+                return order;
+            }
+            else
+                return null;
         }
     }
 }
