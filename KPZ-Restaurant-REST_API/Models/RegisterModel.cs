@@ -16,5 +16,7 @@ namespace KPZ_Restaurant_REST_API.Models
         public string LastName { get; set; }
 
         public string RestaurantName { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
     }
 }

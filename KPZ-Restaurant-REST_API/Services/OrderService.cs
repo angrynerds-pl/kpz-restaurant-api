@@ -30,18 +30,22 @@ namespace KPZ_Restaurant_REST_API.Services
                 return null;
         }
 
-        public async Task<IEnumerable<OrderedProducts>> AddOrderedProducts(List<OrderedProducts> orderedProducts)
+        public async Task<IEnumerable<OrderedProducts>> AddOrderedProducts(List<OrderedProducts> orderedProducts, int restaurantId)
         {
-            foreach (var orderedProduct in orderedProducts)
+            var productsToAdd = new List<OrderedProducts>();
+            foreach (var product in orderedProducts)
             {
-                var orderedProductCorrect = await _orderedProductsRepo.OrderedProductCorrect(orderedProduct);
+                var orderedProductCorrect = await _orderedProductsRepo.OrderedProductCorrect(product, restaurantId);
                 if (orderedProductCorrect)
-                    await _orderedProductsRepo.Add(orderedProduct);
+                {
+                    productsToAdd.Add(product);
+                }
                 else
                     return null;
             }
 
-            await _ordersRepo.SaveAsync();
+            await _orderedProductsRepo.AddRange(productsToAdd);
+            await _orderedProductsRepo.SaveAsync();
             return orderedProducts;
         }
 
@@ -50,9 +54,9 @@ namespace KPZ_Restaurant_REST_API.Services
             return await _ordersRepo.GetAllOrders(restaurantId);
         }
 
-        public async Task<IList<OrderedProducts>> GetOrderedProducts(int orderId)
+        public async Task<IList<OrderedProducts>> GetOrderedProducts(int orderId, int restaurantId)
         {
-            var orderedProducts = await _orderedProductsRepo.GetOrderedProducts(orderId);
+            var orderedProducts = await _orderedProductsRepo.GetOrderedProducts(orderId, restaurantId);
             if (orderedProducts == null || orderedProducts.Count == 0)
                 return null;
             else

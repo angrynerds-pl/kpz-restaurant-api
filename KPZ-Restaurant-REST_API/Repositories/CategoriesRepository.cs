@@ -18,18 +18,18 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<bool> CategoryCorrect(Category category)
         {
-            return (! await _context.Categories.AnyAsync(c => c.Name == category.Name && c.RestaurantId == category.RestaurantId )) 
+            return (! await _context.Categories.AnyAsync(c => c.Name == category.Name && c.RestaurantId == category.RestaurantId && c.DeletedAt != null)) 
             && ( await _context.Restaurants.AnyAsync(r => r.Id == category.RestaurantId));
         }
 
         public async Task<IEnumerable<Category>> GetAllCategories(int restaurantId)
         {
-            return await _context.Categories.Where(c => c.RestaurantId == restaurantId).ToListAsync();
+            return await _context.Categories.Where(c => c.RestaurantId == restaurantId && c.DeletedAt == null).ToListAsync();
         }
 
         public async Task<Category> GetCategoryByName(string categoryName)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.Name == categoryName);
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Name == categoryName && c.DeletedAt == null);
         }
     }
 }

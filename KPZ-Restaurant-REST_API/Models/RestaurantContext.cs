@@ -15,12 +15,11 @@ namespace KPZ_Restaurant_REST_API.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach(var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
         }
-
 
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Table> Tables { get; set; }

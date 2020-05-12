@@ -9,5 +9,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
     public interface IRoomsRepository : IRestaurantGeneric<Room>
     {
         Task<bool> RoomCorrect(Room room);
+        Task<IEnumerable<Room>> GetAllRooms(int restaurantId);
+        Task<Room> DeleteRoomById(int roomId, int restaurantId);
     }
 }

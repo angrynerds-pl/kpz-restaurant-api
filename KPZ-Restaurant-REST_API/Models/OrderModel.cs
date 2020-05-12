@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace KPZ_Restaurant_REST_API.Models
@@ -9,5 +10,6 @@ namespace KPZ_Restaurant_REST_API.Models
         public string WaiterUsername { get; set; }
         public string Note { get; set; }
         public List<Product> OrderedProducts { get; set; }  
+
     }
 }

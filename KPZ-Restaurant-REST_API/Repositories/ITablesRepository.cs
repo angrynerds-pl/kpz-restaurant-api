@@ -8,6 +8,9 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface ITablesRepository : IRestaurantGeneric<Table>
     {
-        Task<Table> GetTableById(int id);
+        Task<bool> CheckIfTablePresent(Table table);
+        Task<Table> DeleteTableById(int id, int restaurantId);
+        Task<IEnumerable<Table>> GetTablesByRoomId(int roomId, int restaurantId);
+        Task<Table> GetTableById(int id, int restaurantId);
     }
 }

@@ -24,6 +24,8 @@ namespace KPZ_Restaurant_REST_API.Models
         public int NumberOfSeats { get; set; }
         //[Column(TypeName="NVARCHAR")]
         public string CustomerName { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
 
     }
 }

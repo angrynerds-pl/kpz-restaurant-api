@@ -15,51 +15,57 @@ namespace KPZ_Restaurant_REST_API.Controllers
     [ApiController]
     public class RoomsController : ControllerBase
     {
-
         private IRoomService _roomService;
+        private ISecurityService _securityService;
 
-        private bool CheckIfInRole(string requiredRole)
-        {
-            var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-
-            if (role != requiredRole)
-                return false;
-            else
-                return true;
-        }
-
-        public RoomsController(IRoomService roomService)
+        public RoomsController(IRoomService roomService, ISecurityService securityService)
         {
             _roomService = roomService;
+            _securityService = securityService;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Room>>> GetAllRooms()
         {
-            int restaurantId;
-            try
-            {
-                restaurantId = Int32.Parse(User.Claims.FirstOrDefault(c => c.Type == "Restaurant").Value);
-            }
-            catch (FormatException e)
-            {
-                restaurantId = 0;
-                Console.WriteLine(e.Message);
-            }
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
 
             var rooms = await _roomService.GetAllRooms(restaurantId);
             return Ok(rooms);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNewRoom([FromBody] Room room)
+        [Authorize]
+        public async Task<ActionResult<Room>> CreateNewRoom([FromBody] Room room)
         {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
             var createdRoom = await _roomService.CreateNewRoom(room);
 
             if (createdRoom != null)
                 return Ok(createdRoom);
             else
                 return BadRequest(createdRoom);
+        }
+
+        [HttpDelete("{roomId}")]
+        [Authorize]
+        public async Task<ActionResult<Room>> DeleteRoomById(int roomId)
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var removedRoom = await _roomService.DeleteRoomById(roomId, restaurantId);
+
+            if (removedRoom != null)
+                return Ok(removedRoom);
+            else
+                return NotFound(removedRoom);
         }
 
     }

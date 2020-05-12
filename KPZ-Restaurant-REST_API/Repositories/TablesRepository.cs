@@ -16,9 +16,31 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context = context;
         }
 
-        public async Task<Table> GetTableById(int id)
+        public async Task<bool> CheckIfTablePresent(Table table)
         {
-            return await _context.Tables.FirstOrDefaultAsync(t => t.Id == id);
+            return await _context.Tables.AnyAsync(t => t.Number == table.Number && t.RoomId == table.RoomId && t.DeletedAt == null);
+        }
+
+        public async Task<Table> DeleteTableById(int id, int restaurantId)
+        {
+            var tableToDelete = await _context.Tables.Where(t => t.Id == id && t.Room.RestaurantId == restaurantId && t.DeletedAt == null).FirstOrDefaultAsync();
+            if (tableToDelete != null)
+            {
+                tableToDelete.DeletedAt = DateTime.Now;
+                return tableToDelete;
+            }
+            else
+                return null;
+        }
+
+        public async Task<Table> GetTableById(int id, int restaurantId)
+        {
+            return await _context.Tables.FirstOrDefaultAsync(t => t.Id == id && t.Room.RestaurantId == restaurantId && t.DeletedAt == null);
+        }
+
+        public async Task<IEnumerable<Table>> GetTablesByRoomId(int roomId, int restaurantId)
+        {
+            return await _context.Tables.Where(t => t.RoomId == roomId && t.Room.RestaurantId == restaurantId && t.DeletedAt == null).ToListAsync();
         }
     }
 }

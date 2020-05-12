@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace KPZ_Restaurant_REST_API.Repositories
@@ -10,8 +11,10 @@ namespace KPZ_Restaurant_REST_API.Repositories
     {
         Task<bool> CheckIfPresent(User user);
 
-        Task<List<User>> GetAllFiltered(Func<User, bool> filter);
-
-        Task<List<User>> GetAllByRights(UserType rights);
+        Task<ICollection<User>> GetAllFiltered(Expression<Func<User, bool>> predicate);
+        Task<User> GetUserById(int id);
+        Task<ICollection<User>> GetAllByRights( UserType rights, int restaurantId);
+        Task<ICollection<User>> GetByUsername(string username);
+        Task<ICollection<User>> GetAllUsers(int restaurantId);
     }
 }

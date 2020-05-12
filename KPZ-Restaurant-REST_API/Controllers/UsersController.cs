@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -11,32 +12,27 @@ namespace KPZ_Restaurant_REST_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController: ControllerBase
+    public class UsersController: ControllerBase
     {
         private IUserService _userService;
+        private ISecurityService _securityService;
 
-        public UserController(IUserService userService)
+        public UsersController(IUserService userService, ISecurityService securityService)
         {
             _userService = userService;
-        }
-
-        private bool CheckIfInRole(string requiredRole)
-        {
-            var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-
-            if (role != requiredRole)
-                return false;
-            return true;
+            _securityService = securityService;
         }
 
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
+                
+            var restaurantId = _securityService.GetRestaurantId(User);
 
-            var waiters = await _userService.GetAllUsers();
+            var waiters = await _userService.GetAllUsers(restaurantId);
 
             return Ok(waiters);
         }
@@ -45,7 +41,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
             var user = await _userService.GetById(id);
@@ -60,10 +56,12 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetAllWaiters()
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var waiters = await _userService.GetAllWaiters();
+            var restaurantId = _securityService.GetRestaurantId(User);
+
+            var waiters = await _userService.GetAllWaiters(restaurantId);
 
             return Ok(waiters);
         }
@@ -72,7 +70,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<IActionResult> AddNewWaiter([FromBody] User user)
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
             user.Password = PasswordHasher.HashPassword(user.Password);
@@ -89,10 +87,12 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetAllCooks()
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var waiters = await _userService.GetAllCooks();
+            var restaurantId = _securityService.GetRestaurantId(User);
+
+            var waiters = await _userService.GetAllCooks(restaurantId);
 
             return Ok(waiters);
         }
@@ -101,7 +101,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         [Authorize]
         public async Task<IActionResult> AddNewCook([FromBody] User user)
         {
-            if (!CheckIfInRole("MANAGER"))
+            if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
             user.Password = PasswordHasher.HashPassword(user.Password);

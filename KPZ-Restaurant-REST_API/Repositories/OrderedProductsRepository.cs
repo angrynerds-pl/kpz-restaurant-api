@@ -15,16 +15,16 @@ namespace KPZ_Restaurant_REST_API.Repositories
         {
             _context = context;
         }
-
-        public async Task<IList<OrderedProducts>> GetOrderedProducts(int orderId)
+        
+        public async Task<IList<OrderedProducts>> GetOrderedProducts(int orderId, int restaurantId)
         {
-            return await _context.OrderedProducts.Where(o => o.OrderId == orderId).Include(o => o.Product).ToListAsync();
+            return await _context.OrderedProducts.Where(o => o.OrderId == orderId && o.Order.RestaurantId == restaurantId && o.DeletedAt == null).Include(o => o.Product).ToListAsync();
         }
-
-        public async Task<bool> OrderedProductCorrect(OrderedProducts orderedProduct)
+        
+        public async Task<bool> OrderedProductCorrect(OrderedProducts orderedProduct, int restaurantId)
         {
-            return await _context.Orders.AnyAsync(o => o.Id == orderedProduct.OrderId)
-                && await _context.Products.AnyAsync(p => p.Id == orderedProduct.ProductId);
+            return await _context.Orders.AnyAsync(o => o.Id == orderedProduct.OrderId && o.RestaurantId == restaurantId && o.DeletedAt == null)
+                && await _context.Products.AnyAsync(p => p.Id == orderedProduct.ProductId && p.RestaurantId == restaurantId && p.DeletedAt == null);
         }
 
         public async Task<OrderedProducts> UpdateOrderedProduct(OrderedProducts orderedProduct)

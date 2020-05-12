@@ -29,13 +29,17 @@ namespace KPZ_Restaurant_REST_API.Repositories
             await _context.Set<T>().AddRangeAsync(elements);
         }
 
-        public void DeleteById(int id)
+        public T DeleteById(int id)
         {
-            T entities = _context.Set<T>().Find(id);
-            _context.Set<T>().Remove(entities);
+            T entity = _context.Set<T>().Find(id);
+            if (entity != null)
+            {
+                _context.Set<T>().Remove(entity);
+                return entity;
+            }
+            else
+                return null;
         }
-
-
 
         public IQueryable<T> Get()
         {
