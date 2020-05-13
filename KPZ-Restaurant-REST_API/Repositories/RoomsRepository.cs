@@ -22,6 +22,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
             if (roomToDelete != null)
             {
                 roomToDelete.DeletedAt = DateTime.Now;
+                _context.Rooms.Update(roomToDelete);
                 return roomToDelete;
             }
             else

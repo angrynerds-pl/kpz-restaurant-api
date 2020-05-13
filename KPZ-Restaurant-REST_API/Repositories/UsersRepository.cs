@@ -36,14 +36,27 @@ namespace KPZ_Restaurant_REST_API.Repositories
             return await _context.Users.Where(u => u.Username == username && u.DeletedAt == null).ToListAsync();
         }
 
-        public async Task<User> GetUserById(int id)
+        public async Task<User> GetUserById(int id, int restaurantId)
         {
-            return await _context.Users.Where(u => u.Id == id && u.DeletedAt == null).FirstOrDefaultAsync();
+            return await _context.Users.Where(u => u.Id == id && u.RestaurantId == restaurantId && u.DeletedAt == null).FirstOrDefaultAsync();
         }
 
         public async Task<ICollection<User>> GetAllUsers(int restaurantId)
         {
             return await _context.Users.Where(u => u.RestaurantId == restaurantId && u.DeletedAt == null).ToListAsync();
+        }
+
+        public async Task<User> DeleteUserById(int id, int restaurantId)
+        {
+            var userToDelete = await _context.Users.Where(u => u.Id == id && u.RestaurantId == restaurantId && u.DeletedAt == null).FirstOrDefaultAsync();
+            if(userToDelete != null)
+            {
+                userToDelete.DeletedAt = DateTime.Now;
+                _context.Users.Update(userToDelete);
+                return userToDelete;
+            } 
+            else
+                return null;
         }
     }
 }

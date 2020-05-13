@@ -12,7 +12,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController: ControllerBase
+    public class UsersController : ControllerBase
     {
         private IUserService _userService;
         private ISecurityService _securityService;
@@ -29,7 +29,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         {
             if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
-                
+
             var restaurantId = _securityService.GetRestaurantId(User);
 
             var waiters = await _userService.GetAllUsers(restaurantId);
@@ -44,13 +44,48 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
-            var user = await _userService.GetById(id);
-            
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var user = await _userService.GetById(id, restaurantId);
+
             if (user != null)
                 return Ok(user);
             else
                 return NotFound(user);
         }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<ActionResult<User>> DeleteUser(int id)
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var deletedUser = await _userService.DeleteUserById(id, restaurantId);
+
+            if (deletedUser != null)
+                return Ok(deletedUser);
+            else
+                return NotFound(deletedUser);
+        }
+
+        [HttpPut("{userId}")]
+        [Authorize]
+        public async Task<ActionResult<User>> UpdateUserInfo([FromBody] User user, int userId)
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            user.Id = userId;
+            var updatedUser = await _userService.UpdateUserInfo(user, restaurantId);
+
+            if (updatedUser != null)
+                return Ok(updatedUser);
+            else
+                return NotFound(updatedUser);
+        }
+
 
         [HttpGet("waiters")]
         [Authorize]
@@ -114,6 +149,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return Conflict(addedUser);
         }
 
-        
+
     }
 }
