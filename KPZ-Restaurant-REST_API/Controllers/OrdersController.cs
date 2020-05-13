@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using KPZ_Restaurant_REST_API.Models;
 using KPZ_Restaurant_REST_API.Services;
@@ -19,6 +20,34 @@ namespace KPZ_Restaurant_REST_API.Controllers
             _orderService = orderService;
             _securityService = securityService;
         }
+
+        [HttpGet("{orderId}")]
+        [Authorize]
+        public async Task<ActionResult<Order>> GetOrderById(int orderId)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var foundOrder = await _orderService.GetOrderById(orderId, restaurantId);
+
+            if (foundOrder != null)
+                return Ok(foundOrder);
+            else
+                return NotFound(foundOrder);
+        }
+
+        // [HttpPut("{orderId}")]
+        // [Authorize]
+        // public async Task<ActionResult<Order>> UpdateOrder([FromBody] Order order, int orderId)
+        // {
+        //     if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+        //         return Unauthorized();
+
+        //     var restaurantId = _securityService.GetRestaurantId(User);
+        //     var updatedOrder = await _orderService.UpdateOrder()
+
+        // }
 
         [HttpGet]
         [Authorize]
@@ -48,14 +77,23 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(orderedProducts);
         }
 
-        [HttpGet("recent")]
+        [HttpGet("table/{tableId}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> GetRecentOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersForTable(int tableId)
         {
-            //TO DO
-            //Implement recent orders
-            return Ok(await _orderService.GetAllOrders(1));
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var ordersForTable = await _orderService.GetOrdersForTable(tableId, restaurantId);
+
+            if (ordersForTable != null)
+                return Ok(ordersForTable);
+            else
+                return NotFound(ordersForTable);
+
         }
+
 
         [HttpPost("products")]
         [Authorize]
@@ -70,33 +108,35 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (products != null)
                 return Ok(products);
             else
-                return NotFound(products);
+                return BadRequest(products);
         }
 
-        [HttpPut("products")]
+        [HttpPut("products/{orderedProductId}")]
         [Authorize]
-        public async Task<ActionResult<OrderedProducts>> UpdateOrderedProduct([FromBody] OrderedProducts orderedProduct)
+        public async Task<ActionResult<OrderedProducts>> UpdateOrderedProduct([FromBody] OrderedProducts orderedProduct, int orderedProductId)
         {
             if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
                 return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
+            orderedProduct.Id = orderedProductId;
             var products = await _orderService.UpdateOrderedProduct(orderedProduct, restaurantId);
 
             if (products != null)
                 return Ok(products);
             else
-                return NotFound(products);
+                return BadRequest(products);
         }
 
-        [HttpPut]
+        [HttpPut("{orderId}")]
         [Authorize]
-        public async Task<ActionResult<OrderedProducts>> UpdateOrder([FromBody] Order order)
+        public async Task<ActionResult<OrderedProducts>> UpdateOrder([FromBody] Order order, int orderId)
         {
             if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
                 return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
+            order.Id = orderId;
             var updatedOrder = await _orderService.UpdateOrder(order, restaurantId);
 
             if (updatedOrder != null)
@@ -107,7 +147,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateNewOrder([FromBody] Order order)
+        public async Task<ActionResult<Order>> CreateNewOrder([FromBody] Order order)
         {
             if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
                 return Unauthorized();
@@ -120,6 +160,38 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return Ok(createdOrder);
             else
                 return BadRequest(createdOrder);
+        }
+
+        [HttpPut("products")]
+        [Authorize]
+        public async Task<ActionResult<OrderedProducts>> UpdateManyOrderedProducts([FromBody] List<OrderedProducts> orderedProducts)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var updatedOrderedProducts = await _orderService.UpdateManyOrderedProducts(orderedProducts, restaurantId);
+
+            if (updatedOrderedProducts.Count() > 0)
+                return Ok(updatedOrderedProducts);
+            else
+                return BadRequest(updatedOrderedProducts);
+        }
+
+        [HttpDelete("products/{orderedProductId}")]
+        [Authorize]
+        public async Task<ActionResult<OrderedProducts>> DeleteOrderedProduct(int orderedProductId)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var deletedOrderedProduct = await _orderService.DeleteOrderedProduct(orderedProductId, restaurantId);
+
+            if (deletedOrderedProduct != null)
+                return Ok(deletedOrderedProduct);
+            else
+                return NotFound(deletedOrderedProduct);
         }
 
     }

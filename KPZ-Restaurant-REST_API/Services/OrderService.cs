@@ -68,9 +68,8 @@ namespace KPZ_Restaurant_REST_API.Services
             var orderedProductCorrect = await _orderedProductsRepo.OrderedProductCorrect(orderedProduct, restaurantId);
             if (orderedProductCorrect)
             {
-                await _orderedProductsRepo.UpdateOrderedProduct(orderedProduct);
-                await _orderedProductsRepo.SaveAsync();
-                return orderedProduct;
+                var updatedProduct = await _orderedProductsRepo.UpdateOrderedProduct(orderedProduct);
+                return updatedProduct;
             }
             else
                 return null;
@@ -83,12 +82,53 @@ namespace KPZ_Restaurant_REST_API.Services
             var orderCorrect = await _ordersRepo.OrderCorrect(order);
             if (orderCorrect)
             {
-                await _ordersRepo.UpdateOrder(order);
-                await _ordersRepo.SaveAsync();
-                return order;
+                var updatedOrder = await _ordersRepo.UpdateOrder(order);
+                return updatedOrder;
             }
             else
                 return null;
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersForTable(int tableId, int restaurantId)
+        {
+            return await _ordersRepo.GetOrdersForTable(tableId, restaurantId);
+        }
+
+        public async Task<Order> GetOrderById(int orderId, int restaurantId)
+        {
+            return await _ordersRepo.GetOrderById(orderId, restaurantId);
+        }
+
+        public async Task<OrderedProducts> DeleteOrderedProduct(int orderedProductId, int restaurantId)
+        {
+            var deletedOrderedProduct = await _orderedProductsRepo.DeleteOrderedProductById(orderedProductId, restaurantId);
+            if (deletedOrderedProduct != null)
+            {
+                await _orderedProductsRepo.SaveAsync();
+                return deletedOrderedProduct;
+            }
+            else
+                return null;
+        }
+
+        public async Task<IEnumerable<OrderedProducts>> UpdateManyOrderedProducts(List<OrderedProducts> orderedProducts, int restaurantId)
+        {
+            var updatedProducts = new List<OrderedProducts>();
+
+            foreach (var orderedProduct in orderedProducts)
+            {
+                var orderedProductCorrect = await _orderedProductsRepo.OrderedProductCorrect(orderedProduct, restaurantId);
+
+                if (orderedProductCorrect)
+                {
+                    var updatedProduct = await _orderedProductsRepo.UpdateOrderedProduct(orderedProduct);
+                    if(updatedProduct != null)
+                        updatedProducts.Add(updatedProduct);
+                }
+            }
+
+            return updatedProducts;
+
         }
     }
 }

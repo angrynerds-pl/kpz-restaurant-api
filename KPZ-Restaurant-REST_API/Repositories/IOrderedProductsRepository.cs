@@ -11,5 +11,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
         Task<bool> OrderedProductCorrect(OrderedProducts orderedProduct, int restaurantId);
         Task<IList<OrderedProducts>> GetOrderedProducts(int orderId, int restaurantId); 
         Task<OrderedProducts> UpdateOrderedProduct(OrderedProducts orderedProduct);
+        Task<OrderedProducts> DeleteOrderedProductById(int orderedProductId, int restaurantId);
+        Task<OrderedProducts> GetOrderedProductById(int id, int restaurantId);
     }
 }
