@@ -27,6 +27,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
             if (tableToDelete != null)
             {
                 tableToDelete.DeletedAt = DateTime.Now;
+                _context.Tables.Update(tableToDelete);
                 return tableToDelete;
             }
             else

@@ -22,6 +22,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
             if(orderedProductToDelete != null)
             {
                 orderedProductToDelete.DeletedAt = DateTime.Now;
+                _context.OrderedProducts.Update(orderedProductToDelete);
                 return orderedProductToDelete;
             }
             else

@@ -79,9 +79,9 @@ namespace KPZ_Restaurant_REST_API.Services
             return await _userRepo.GetAllUsers(restaurantId);
         }
 
-        public async Task<User> GetById(int id)
+        public async Task<User> GetById(int id, int restaurantId)
         {
-            return await _userRepo.GetUserById(id);
+            return await _userRepo.GetUserById(id, restaurantId);
         }
 
         public async Task<IEnumerable<User>> GetAllCooks(int restaurantId)
@@ -98,6 +98,37 @@ namespace KPZ_Restaurant_REST_API.Services
                 await _userRepo.Add(user);
                 await _userRepo.SaveAsync();
                 return user;
+            }
+            else
+                return null;
+        }
+
+        public async Task<User> DeleteUserById(int id, int restaurantId)
+        {
+            var deletedUser = await _userRepo.DeleteUserById(id, restaurantId);
+            if (deletedUser != null)
+            {
+                await _userRepo.SaveAsync();
+                return deletedUser;
+            } else
+                return null;
+        }
+
+        public async Task<User> UpdateUserInfo(User user, int restaurantId)
+        {
+            var userToUpdate = await _userRepo.GetUserById(user.Id, restaurantId);
+
+            if(userToUpdate != null) 
+            {
+                userToUpdate.Username = user.Username;
+                userToUpdate.Password = PasswordHasher.HashPassword(user.Password);
+                userToUpdate.FirstName = user.FirstName;
+                userToUpdate.LastName = user.LastName;
+                userToUpdate.Rights = user.Rights;
+
+                _userRepo.Update(userToUpdate);
+                await _userRepo.SaveAsync();
+                return userToUpdate;
             }
             else
                 return null;
