@@ -16,5 +16,6 @@ namespace KPZ_Restaurant_REST_API.Services
         Task<Order> GetOrderById(int orderId, int restaurantId);
         Task<OrderedProducts> DeleteOrderedProduct(int orderedProductId, int restaurantId);
         Task<IEnumerable<OrderedProducts>> UpdateManyOrderedProducts(List<OrderedProducts> orderedProducts, int restaurantId);
+        Task<IEnumerable<OrderedProducts>> GetServedProducts(int orderId, int restaurantId);
     }
 }
