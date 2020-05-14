@@ -130,5 +130,14 @@ namespace KPZ_Restaurant_REST_API.Services
             return updatedProducts;
 
         }
+
+        public async Task<IEnumerable<OrderedProducts>> GetServedProducts(int orderId, int restaurantId)
+        {
+            var servedProducts = await _orderedProductsRepo.GetServedProducts(orderId, restaurantId);
+            if (servedProducts == null || servedProducts.Count == 0)
+                return null;
+            else
+                return servedProducts;
+        }
     }
 }

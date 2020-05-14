@@ -37,17 +37,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(foundOrder);
         }
 
-        // [HttpPut("{orderId}")]
-        // [Authorize]
-        // public async Task<ActionResult<Order>> UpdateOrder([FromBody] Order order, int orderId)
-        // {
-        //     if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
-        //         return Unauthorized();
-
-        //     var restaurantId = _securityService.GetRestaurantId(User);
-        //     var updatedOrder = await _orderService.UpdateOrder()
-
-        // }
 
         [HttpGet]
         [Authorize]
@@ -75,6 +64,22 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return Ok(orderedProducts);
             else
                 return NotFound(orderedProducts);
+        }
+
+        [HttpGet("products/served/{orderId}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<OrderedProducts>>> GetServedProducts(int orderId)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var servedProducts = await _orderService.GetServedProducts(orderId, restaurantId);
+
+            if (servedProducts != null)
+                return Ok(servedProducts);
+            else
+                return NotFound(servedProducts);
         }
 
         [HttpGet("table/{tableId}")]

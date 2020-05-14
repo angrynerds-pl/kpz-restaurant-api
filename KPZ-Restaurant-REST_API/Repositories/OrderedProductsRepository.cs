@@ -38,7 +38,12 @@ namespace KPZ_Restaurant_REST_API.Repositories
         {
             return await _context.OrderedProducts.Where(o => o.OrderId == orderId && o.Order.RestaurantId == restaurantId && o.DeletedAt == null).Include(o => o.Product).ToListAsync();
         }
-        
+
+        public async Task<IList<OrderedProducts>> GetServedProducts(int orderId, int restaurantId)
+        {
+            return await _context.OrderedProducts.Where(o => o.OrderId == orderId && o.Order.RestaurantId == restaurantId && o.Status == "SERVED" && o.DeletedAt == null).Include(o => o.Product).ToListAsync();
+        }
+
         public async Task<bool> OrderedProductCorrect(OrderedProducts orderedProduct, int restaurantId)
         {
             return await _context.Orders.AnyAsync(o => o.Id == orderedProduct.OrderId && o.RestaurantId == restaurantId && o.DeletedAt == null)
