@@ -83,12 +83,33 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return Unauthorized();
             }
 
-            var addedTable = await _tableService.AddNewTable(table);
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var addedTable = await _tableService.AddNewTable(table, restaurantId);
 
             if (addedTable != null)
                 return Ok(addedTable);
             else
                 return Conflict(table);
+        }
+
+        [HttpGet("filtered")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Table>>> GetTablesFiltered()
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User)
+                && !_securityService.CheckIfInRole("WAITER", User)
+                && !_securityService.CheckIfInRole("MANAGER", User))
+            {
+                return Unauthorized();
+            }
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var filteredTables = await _tableService.GetTablesFilterd(restaurantId);
+
+            if (filteredTables != null)
+                return Ok(filteredTables);
+            else
+                return BadRequest(filteredTables);
         }
 
         [HttpPut("{id}")]

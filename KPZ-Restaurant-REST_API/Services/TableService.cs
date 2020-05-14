@@ -16,11 +16,12 @@ namespace KPZ_Restaurant_REST_API.Services
             _tablesRepository = tablesRepository;
         }
 
-        public async Task<Table> AddNewTable(Table table)
+        public async Task<Table> AddNewTable(Table table, int restaurantId)
         {
-            var tableNotPresent = _tablesRepository.CheckIfTablePresent(table);
+            var tableCorrect = _tablesRepository.TableCorrect(table, restaurantId);
+            var tableNotPresent = _tablesRepository.CheckIfTablePresent(table, restaurantId);
 
-            if (tableNotPresent.Result)
+            if (!tableNotPresent.Result && tableCorrect.Result && table.Number > 0 && table.Seats > 0 && table.X >= 0 && table.Y >= 0)
             {
                 await _tablesRepository.Add(table);
                 await _tablesRepository.SaveAsync();
@@ -39,6 +40,11 @@ namespace KPZ_Restaurant_REST_API.Services
         public async Task<Table> GetTableById(int id, int restaurantId)
         {
             return await _tablesRepository.GetTableById(id, restaurantId);
+        }
+
+        public async Task<IEnumerable<Table>> GetTablesFilterd(int restaurantId)
+        {
+            return await _tablesRepository.GetAllTablesFilteredBySeatsCount(restaurantId);
         }
 
         public async Task<Table> RemoveTableById(int id, int restaurantId)
