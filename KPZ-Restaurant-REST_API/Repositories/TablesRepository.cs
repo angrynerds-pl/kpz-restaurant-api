@@ -16,9 +16,9 @@ namespace KPZ_Restaurant_REST_API.Repositories
             _context = context;
         }
 
-        public async Task<bool> CheckIfTablePresent(Table table)
+        public async Task<bool> CheckIfTablePresent(Table table, int restaurantId)
         {
-            return await _context.Tables.AnyAsync(t => t.Number == table.Number && t.RoomId == table.RoomId && t.DeletedAt == null);
+            return await _context.Tables.AnyAsync(t => t.Number == table.Number && t.RoomId == table.RoomId && t.Room.RestaurantId == restaurantId && t.DeletedAt == null);
         }
 
         public async Task<Table> DeleteTableById(int id, int restaurantId)
@@ -34,6 +34,16 @@ namespace KPZ_Restaurant_REST_API.Repositories
                 return null;
         }
 
+        public async Task<IList<Table>> GetAllTables(int restaurantId)
+        {
+            return await _context.Tables.Where(t => t.Room.RestaurantId == restaurantId && t.DeletedAt == null).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Table>> GetAllTablesFilteredBySeatsCount(int restaurantId)
+        {
+            return await _context.Tables.Where(t => t.Room.RestaurantId == restaurantId && t.DeletedAt == null).OrderByDescending(t => t.Seats).ToListAsync();
+        }
+
         public async Task<Table> GetTableById(int id, int restaurantId)
         {
             return await _context.Tables.FirstOrDefaultAsync(t => t.Id == id && t.Room.RestaurantId == restaurantId && t.DeletedAt == null);
@@ -42,6 +52,11 @@ namespace KPZ_Restaurant_REST_API.Repositories
         public async Task<IEnumerable<Table>> GetTablesByRoomId(int roomId, int restaurantId)
         {
             return await _context.Tables.Where(t => t.RoomId == roomId && t.Room.RestaurantId == restaurantId && t.DeletedAt == null).ToListAsync();
+        }
+
+        public async Task<bool> TableCorrect(Table table, int restaurantId)
+        {
+            return await _context.Rooms.AnyAsync(r => r.Id == table.RoomId && r.RestaurantId == restaurantId && r.DeletedAt == null); 
         }
     }
 }
