@@ -116,23 +116,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         }
 
-        [HttpGet("history/hours/{hours}")]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByOrderDate(int hours)
-        {
-            // if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
-            //     return Unauthorized();
-
-            // var restaurantId = _securityService.GetRestaurantId(User);
-            // var orders = await _orderService.GetOrdersByOrderDate(hours, restaurantId);
-
-            // if (orders != null)
-            //     return Ok(orders);
-            // else
-            //     return NotFound(orders);
-            return null;
-
-        }
 
 
         [HttpPost("products")]
