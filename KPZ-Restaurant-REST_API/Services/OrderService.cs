@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using KPZ_Restaurant_REST_API.Models;
 using KPZ_Restaurant_REST_API.Repositories;
@@ -138,6 +140,12 @@ namespace KPZ_Restaurant_REST_API.Services
                 return null;
             else
                 return servedProducts;
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByOrderDate(int year, int month, int day, int restaurantId)
+        {
+            var serachedDate = new DateTime(year, month, day);
+            return await _ordersRepo.GetOrdersByDate(serachedDate, restaurantId);
         }
     }
 }

@@ -211,7 +211,8 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(1).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.WAITER).Id,
                         OrderDate = DateTime.Now,
-                        Note = "na szybko"
+                        Note = "na szybko",
+                        Status = "IN_PROGRESS"
                     },
                     new Order()
                     {
@@ -219,7 +220,8 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(2).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.WAITER).Id,
                         OrderDate = DateTime.Now,
-                        Note = "bez pośpiechu"
+                        Note = "bez pośpiechu",
+                        Status = "PENDING"
                     },
                     new Order()
                     {
@@ -227,7 +229,8 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(3).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.WAITER).Id,
                         OrderDate = DateTime.Now,
-                        Note = "weganie, tfu"
+                        Note = "weganie, tfu",
+                        Status = "PENDING"
                     },
                     new Order()
                     {
@@ -235,7 +238,8 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(4).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.HEAD_WAITER).Id,
                         OrderDate = DateTime.Now,
-                        Note = "przynieść krzesło dla bachora"
+                        Note = "przynieść krzesło dla bachora",
+                        Status = "PAID"
                     },
                     new Order()
                     {
@@ -243,7 +247,8 @@ namespace KPZ_Restaurant_REST_API.Models
                         TableId = context.Tables.Find(1).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.HEAD_WAITER).Id,
                         OrderDate = DateTime.Now,
-                        Note = "xD"
+                        Note = "xD",
+                        Status = "IN_PROGRESS"
                     }
                 );
 
