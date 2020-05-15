@@ -110,7 +110,8 @@ namespace KPZ_Restaurant_REST_API.Services
             {
                 await _userRepo.SaveAsync();
                 return deletedUser;
-            } else
+            }
+            else
                 return null;
         }
 
@@ -118,10 +119,13 @@ namespace KPZ_Restaurant_REST_API.Services
         {
             var userToUpdate = await _userRepo.GetUserById(user.Id, restaurantId);
 
-            if(userToUpdate != null) 
+            if (userToUpdate != null)
             {
                 userToUpdate.Username = user.Username;
-                userToUpdate.Password = PasswordHasher.HashPassword(user.Password);
+
+                if (!PasswordHasher.ComparePassword(user.Password, userToUpdate.Password))
+                    userToUpdate.Password = PasswordHasher.HashPassword(user.Password);
+                    
                 userToUpdate.FirstName = user.FirstName;
                 userToUpdate.LastName = user.LastName;
                 userToUpdate.Rights = user.Rights;
