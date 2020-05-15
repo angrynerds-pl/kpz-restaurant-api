@@ -58,6 +58,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
                 entity.WaiterId = order.WaiterId;
                 entity.Note = order.Note;
                 entity.OrderDate = order.OrderDate;
+                entity.Status = order.Status;
                 _context.Orders.Update(entity);
                 await _context.SaveChangesAsync();
                 return entity;
