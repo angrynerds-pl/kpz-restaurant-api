@@ -37,6 +37,11 @@ namespace KPZ_Restaurant_REST_API.Repositories
             return await _context.Orders.Where(o => o.TableId == tableId && o.Status == "IN_PROGRESS" && o.RestaurantId == restaurantId && o.DeletedAt == null).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
 
+        public async Task<IEnumerable<Order>> GetOrdersInProgress(int restaurantId)
+        {
+            return await _context.Orders.Where(o => o.Status == "IN_PROGRESS" && o.RestaurantId == restaurantId && o.DeletedAt == null).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
+        }
+
         public async Task<bool> OrderCorrect(Order order)
         {
             return await _context.Set<Table>().AnyAsync(t => t.Id == order.TableId && t.DeletedAt == null)
