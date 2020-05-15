@@ -116,8 +116,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         }
 
-
-
         [HttpPost("products")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> AddProductsToOrder([FromBody] List<OrderedProducts> orderedProducts)
