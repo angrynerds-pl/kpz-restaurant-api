@@ -18,7 +18,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<Room> DeleteRoomById(int roomId, int restaurantId)
         {
-            var roomToDelete = await _context.Rooms.Where(r => r.Id == roomId && r.RestaurantId == restaurantId && r.DeletedAt == null).FirstOrDefaultAsync();
+            var roomToDelete = await _context.Rooms.Where(r => r.Id == roomId && r.RestaurantId == restaurantId ).FirstOrDefaultAsync();
             if (roomToDelete != null)
             {
                 roomToDelete.DeletedAt = DateTime.Now;
@@ -31,7 +31,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<IEnumerable<Room>> GetAllRooms(int restaurantId)
         {
-            return await _context.Rooms.Where(r => r.RestaurantId == restaurantId && r.DeletedAt == null).ToListAsync();
+            return await _context.Rooms.Where(r => r.RestaurantId == restaurantId ).ToListAsync();
         }
 
         public async Task<bool> RoomCorrect(Room room)

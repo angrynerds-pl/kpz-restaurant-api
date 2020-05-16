@@ -31,23 +31,23 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<OrderedProducts> GetOrderedProductById(int id, int restaurantId)
         {
-            return await _context.OrderedProducts.Where(o => o.Id == id && o.Order.RestaurantId == restaurantId  && o.DeletedAt == null).FirstOrDefaultAsync();
+            return await _context.OrderedProducts.Where(o => o.Id == id && o.Order.RestaurantId == restaurantId  ).FirstOrDefaultAsync();
         }
 
         public async Task<IList<OrderedProducts>> GetOrderedProducts(int orderId, int restaurantId)
         {
-            return await _context.OrderedProducts.Where(o => o.OrderId == orderId && o.Order.RestaurantId == restaurantId && o.DeletedAt == null).Include(o => o.Product).ToListAsync();
+            return await _context.OrderedProducts.Where(o => o.OrderId == orderId && o.Order.RestaurantId == restaurantId ).Include(o => o.Product).ToListAsync();
         }
 
         public async Task<IList<OrderedProducts>> GetServedProducts(int orderId, int restaurantId)
         {
-            return await _context.OrderedProducts.Where(o => o.OrderId == orderId && o.Order.RestaurantId == restaurantId && o.Status == "SERVED" && o.DeletedAt == null).Include(o => o.Product).ToListAsync();
+            return await _context.OrderedProducts.Where(o => o.OrderId == orderId && o.Order.RestaurantId == restaurantId && o.Status == "SERVED" ).Include(o => o.Product).ToListAsync();
         }
 
         public async Task<bool> OrderedProductCorrect(OrderedProducts orderedProduct, int restaurantId)
         {
-            return await _context.Orders.AnyAsync(o => o.Id == orderedProduct.OrderId && o.RestaurantId == restaurantId && o.DeletedAt == null)
-                && await _context.Products.AnyAsync(p => p.Id == orderedProduct.ProductId && p.RestaurantId == restaurantId && p.DeletedAt == null);
+            return await _context.Orders.AnyAsync(o => o.Id == orderedProduct.OrderId && o.RestaurantId == restaurantId )
+                && await _context.Products.AnyAsync(p => p.Id == orderedProduct.ProductId && p.RestaurantId == restaurantId );
         }
 
         public async Task<OrderedProducts> UpdateOrderedProduct(OrderedProducts orderedProduct)
