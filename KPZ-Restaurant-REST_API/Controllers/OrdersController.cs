@@ -50,6 +50,22 @@ namespace KPZ_Restaurant_REST_API.Controllers
             return Ok(orders);
         }
 
+        [HttpGet("inProgress")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersInProgress()
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var orders = await _orderService.GetOrdersInProgress(restaurantId);
+            if (orders != null)
+                return Ok(orders);
+            else
+                return BadRequest(orders);
+
+        }
+
         [HttpGet("products/{orderId}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> GetOrderedProducts(int orderId)

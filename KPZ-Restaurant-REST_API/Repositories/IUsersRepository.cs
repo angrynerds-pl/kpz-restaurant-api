@@ -14,7 +14,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
         Task<ICollection<User>> GetAllFiltered(Expression<Func<User, bool>> predicate);
         Task<User> GetUserById(int id, int restaurantId);
         Task<ICollection<User>> GetAllByRights( UserType rights, int restaurantId);
-        Task<ICollection<User>> GetByUsername(string username);
+        Task<User> GetByUsername(string username);
         Task<ICollection<User>> GetAllUsers(int restaurantId);
         Task<User> DeleteUserById(int id, int restaurantId);
     }

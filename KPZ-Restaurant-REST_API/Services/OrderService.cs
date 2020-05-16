@@ -147,5 +147,10 @@ namespace KPZ_Restaurant_REST_API.Services
             var serachedDate = new DateTime(year, month, day);
             return await _ordersRepo.GetOrdersByDate(serachedDate, restaurantId);
         }
+
+        public async Task<IEnumerable<Order>> GetOrdersInProgress(int restaurantId)
+        {
+            return await _ordersRepo.GetOrdersInProgress(restaurantId);
+        }
     }
 }
