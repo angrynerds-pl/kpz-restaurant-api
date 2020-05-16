@@ -16,6 +16,25 @@ namespace KPZ_Restaurant_REST_API.Services
             _tablesRepository = tablesRepository;
         }
 
+        public async Task<IEnumerable<Table>> AddManyTables(List<Table> tables, int restaurantId)
+        {
+            var addedTables = new List<Table>();
+            foreach (var table in tables)
+            {
+                var tableCorrect = await _tablesRepository.TableCorrect(table, restaurantId);
+                if (tableCorrect)
+                {
+                    addedTables.Add(table);
+                }
+                else
+                    return null;
+            }
+
+            await _tablesRepository.AddRange(addedTables);
+            await _tablesRepository.SaveAsync();
+            return addedTables;
+        }
+
         public async Task<Table> AddNewTable(Table table, int restaurantId)
         {
             var tableCorrect = _tablesRepository.TableCorrect(table, restaurantId);
@@ -57,6 +76,38 @@ namespace KPZ_Restaurant_REST_API.Services
             }
             else
                 return null;
+        }
+
+        public async Task<IEnumerable<Table>> UpdateManyTables(List<Table> tables, int restaurantId)
+        {
+            var addedTables = new List<Table>();
+            foreach (var table in tables)
+            {
+                var tableCorrect = await _tablesRepository.TableCorrect(table, restaurantId);
+                if (tableCorrect)
+                {
+                    var tableInDatabase = await _tablesRepository.GetTableById(table.Id, restaurantId);
+                    if (tableInDatabase != null)
+                    {
+                        tableInDatabase.Number = table.Number;
+                        tableInDatabase.RoomId = table.RoomId;
+                        tableInDatabase.Seats = table.Seats;
+                        tableInDatabase.Status = table.Status;
+                        tableInDatabase.X = table.X;
+                        tableInDatabase.Y = table.Y;
+
+                        _tablesRepository.Update(tableInDatabase);
+                        addedTables.Add(tableInDatabase);
+                    }
+                    else
+                        return null;
+                }
+                else
+                    return null;
+            }
+
+            await _tablesRepository.SaveAsync();
+            return addedTables;
         }
 
         public async Task<Table> UpdateTable(int id, Table table, int restaurantId)
