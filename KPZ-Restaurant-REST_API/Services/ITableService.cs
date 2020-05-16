@@ -14,5 +14,6 @@ namespace KPZ_Restaurant_REST_API.Services
         Task<IEnumerable<Table>> GetTablesFilterd(int restaurantId);
         Task<IEnumerable<Table>> AddManyTables(List<Table> tables, int restaurantId);
         Task<IEnumerable<Table>> UpdateManyTables(List<Table> tables, int restaurantId);
+        Task<IEnumerable<Table>> DeleteManyTables(List<Table> tables, int restaurantId);
     } 
 }
