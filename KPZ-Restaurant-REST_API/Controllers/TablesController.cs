@@ -112,6 +112,26 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return Conflict(addedTables);
         }
 
+        [HttpDelete("many")]
+        [Authorize]
+        public async Task<ActionResult<Table>> DeleteManyTables([FromBody] List<Table> tables)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User)
+                && !_securityService.CheckIfInRole("WAITER", User)
+                && !_securityService.CheckIfInRole("MANAGER", User))
+            {
+                return Unauthorized();
+            }
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var deletedTables = await _tableService.DeleteManyTables(tables, restaurantId);
+
+            if (deletedTables != null)
+                return Ok(deletedTables);
+            else
+                return Conflict(deletedTables);
+        }
+
         [HttpPut("many")]
         [Authorize]
         public async Task<ActionResult<Table>> UpdateManyTables([FromBody] List<Table> tables)

@@ -51,6 +51,25 @@ namespace KPZ_Restaurant_REST_API.Services
 
         }
 
+        public async Task<IEnumerable<Table>> DeleteManyTables(List<Table> tables, int restaurantId)
+        {
+            var deletedTables = new List<Table>();
+            foreach (var table in tables)
+            {
+                var tableInDatabase = await _tablesRepository.GetTableById(table.Id, restaurantId);
+                if (tableInDatabase != null)
+                {
+                    await _tablesRepository.DeleteTableById(tableInDatabase.Id, restaurantId);
+                    deletedTables.Add(tableInDatabase);
+                }
+                else
+                    return null;
+            }
+
+            await _tablesRepository.SaveAsync();
+            return deletedTables;
+        }
+
         public async Task<IEnumerable<Table>> GetAllTablesByRoomId(int roomId, int restaurantId)
         {
             return await _tablesRepository.GetTablesByRoomId(roomId, restaurantId);
