@@ -19,6 +19,15 @@ namespace KPZ_Restaurant_REST_API.Models
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
+            modelBuilder.Entity<Category>().HasQueryFilter(c => c.DeletedAt == null);
+            modelBuilder.Entity<Order>().HasQueryFilter(c => c.DeletedAt == null);
+            modelBuilder.Entity<OrderedProducts>().HasQueryFilter(c => c.DeletedAt == null);
+            modelBuilder.Entity<Product>().HasQueryFilter(c => c.DeletedAt == null);
+            modelBuilder.Entity<Reservation>().HasQueryFilter(c => c.DeletedAt == null);
+            modelBuilder.Entity<Room>().HasQueryFilter(c => c.DeletedAt == null);
+            modelBuilder.Entity<Table>().HasQueryFilter(c => c.DeletedAt == null);
+            modelBuilder.Entity<User>().HasQueryFilter(c => c.DeletedAt == null);
         }
 
         public DbSet<Restaurant> Restaurants { get; set; }

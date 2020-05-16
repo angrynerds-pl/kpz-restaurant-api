@@ -24,12 +24,12 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<IEnumerable<Category>> GetAllCategories(int restaurantId)
         {
-            return await _context.Categories.Where(c => c.RestaurantId == restaurantId && c.DeletedAt == null).ToListAsync();
+            return await _context.Categories.Where(c => c.RestaurantId == restaurantId ).ToListAsync();
         }
 
         public async Task<Category> GetCategoryByName(string categoryName)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.Name == categoryName && c.DeletedAt == null);
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Name == categoryName );
         }
     }
 }
