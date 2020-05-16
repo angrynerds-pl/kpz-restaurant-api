@@ -155,7 +155,7 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public async Task<Order> UpdateOrderStatus(int orderId, string status, int restaurantId)
         {
-            var statuses = new List<string>() {"PENDING", "PAID", "IN_PROGRESS"};
+            var statuses = new List<string>() {"PENDING", "PAID", "IN_PROGRESS", "SERVED"};
 
             var orderToUpdate = await _ordersRepo.GetOrderById(orderId, restaurantId);
             if (orderToUpdate != null && statuses.Contains(status))
