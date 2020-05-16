@@ -182,6 +182,22 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(updatedOrder);
         }
 
+        [HttpPut("{orderId}/{status}")]
+        [Authorize]
+        public async Task<ActionResult<OrderedProducts>> UpdateOrderStatus(int orderId, string status )
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var updatedOrder = await _orderService.UpdateOrderStatus(orderId, status.ToUpper(), restaurantId);
+
+            if (updatedOrder != null)
+                return Ok(updatedOrder);
+            else
+                return BadRequest(updatedOrder);
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<Order>> CreateNewOrder([FromBody] Order order)

@@ -152,5 +152,21 @@ namespace KPZ_Restaurant_REST_API.Services
         {
             return await _ordersRepo.GetOrdersInProgress(restaurantId);
         }
+
+        public async Task<Order> UpdateOrderStatus(int orderId, string status, int restaurantId)
+        {
+            var statuses = new List<string>() {"PENDING", "PAID", "IN_PROGRESS"};
+
+            var orderToUpdate = await _ordersRepo.GetOrderById(orderId, restaurantId);
+            if (orderToUpdate != null && statuses.Contains(status))
+            {
+                orderToUpdate.Status = status;
+                var updatedOrder = await _ordersRepo.UpdateOrder(orderToUpdate);
+
+                return updatedOrder;
+            }
+            else
+                return null;
+        }
     }
 }
