@@ -25,10 +25,7 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public async Task<User> GetByUsername(string username)
         {
-            var users = await _userRepo.GetByUsername(username);
-            if (users.Count != 1)
-                return null;
-            return users.FirstOrDefault();
+            return await _userRepo.GetByUsername(username);
         }
 
         public async Task<User> AddNewWaiter(User newWaiter)
@@ -123,9 +120,9 @@ namespace KPZ_Restaurant_REST_API.Services
             {
                 userToUpdate.Username = user.Username;
 
-                if (!PasswordHasher.ComparePassword(user.Password, userToUpdate.Password))
+                if (user.Password != userToUpdate.Password && !PasswordHasher.ComparePassword(user.Password, userToUpdate.Password))
                     userToUpdate.Password = PasswordHasher.HashPassword(user.Password);
-                    
+
                 userToUpdate.FirstName = user.FirstName;
                 userToUpdate.LastName = user.LastName;
                 userToUpdate.Rights = user.Rights;

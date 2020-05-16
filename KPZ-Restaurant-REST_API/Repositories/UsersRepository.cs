@@ -31,9 +31,9 @@ namespace KPZ_Restaurant_REST_API.Repositories
             return await _context.Users.Where( x => x.RestaurantId == restaurantId && x.Rights == rights && x.DeletedAt == null ).ToListAsync(); 
         }
 
-        public async Task<ICollection<User>> GetByUsername(string username)
+        public async Task<User> GetByUsername(string username)
         {
-            return await _context.Users.Where(u => u.Username == username && u.DeletedAt == null).ToListAsync();
+            return await _context.Users.Where(u => u.Username == username && u.DeletedAt == null).FirstOrDefaultAsync();
         }
 
         public async Task<User> GetUserById(int id, int restaurantId)
