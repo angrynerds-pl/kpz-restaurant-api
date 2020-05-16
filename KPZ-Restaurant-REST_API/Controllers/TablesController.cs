@@ -92,6 +92,46 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return Conflict(table);
         }
 
+        [HttpPost("many")]
+        [Authorize]
+        public async Task<ActionResult<Table>> AddManyTables([FromBody] List<Table> tables)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User)
+                && !_securityService.CheckIfInRole("WAITER", User)
+                && !_securityService.CheckIfInRole("MANAGER", User))
+            {
+                return Unauthorized();
+            }
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var addedTables = await _tableService.AddManyTables(tables, restaurantId);
+
+            if (addedTables != null)
+                return Ok(addedTables);
+            else
+                return Conflict(addedTables);
+        }
+
+        [HttpPut("many")]
+        [Authorize]
+        public async Task<ActionResult<Table>> UpdateManyTables([FromBody] List<Table> tables)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User)
+                && !_securityService.CheckIfInRole("WAITER", User)
+                && !_securityService.CheckIfInRole("MANAGER", User))
+            {
+                return Unauthorized();
+            }
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var updatedTables = await _tableService.UpdateManyTables(tables, restaurantId);
+
+            if (updatedTables != null)
+                return Ok(updatedTables);
+            else
+                return NotFound(updatedTables);
+        }
+
         [HttpGet("filtered")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<Table>>> GetTablesFiltered()
