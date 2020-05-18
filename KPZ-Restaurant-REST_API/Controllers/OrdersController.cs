@@ -179,7 +179,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
             if (updatedOrder != null)
                 return Ok(updatedOrder);
             else
-                return NotFound(updatedOrder);
+                return BadRequest(updatedOrder);
         }
 
         [HttpPut("{orderId}/{status}")]

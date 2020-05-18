@@ -69,6 +69,7 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<ICategoriesRepository, CategoriesRepository>();
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<IReservationService, ReservationService>();
+            services.AddScoped<IReservationsRepository, ReservationsRepository>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
