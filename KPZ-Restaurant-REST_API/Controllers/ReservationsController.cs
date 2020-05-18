@@ -64,5 +64,18 @@ namespace KPZ_Restaurant_REST_API.Controllers
             return Ok(reservations);
         }
 
+        [HttpDelete("{reservationId}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Reservation>>> RemoveReservation(int reservationId)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var reservation = await _reservationService.DeleteReservation(reservationId, restaurantId);
+            if (reservation == null)
+                return BadRequest(reservation);
+            return Ok(reservation);
+        }
+
     }
 }
