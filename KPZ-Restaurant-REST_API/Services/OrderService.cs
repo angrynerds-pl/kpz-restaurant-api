@@ -168,5 +168,22 @@ namespace KPZ_Restaurant_REST_API.Services
             else
                 return null;
         }
+
+        public async Task<IEnumerable<Order>> GetOrdersByOrderDateRange(DateRange dateRange, int restaurantId)
+        {
+            return await _ordersRepo.GetOrdersByDateRange(dateRange, restaurantId);
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersFromLastMonth(int restaurantId)
+        {
+            DateRange lastMonth = new DateRange() { StartDate = DateTime.Now.AddMonths(-1), EndDate = DateTime.Now };
+            return await _ordersRepo.GetOrdersByDateRange(lastMonth, restaurantId);
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersFromLastWeek(int restaurantId)
+        {
+            DateRange lastMonth = new DateRange() { StartDate = DateTime.Now.AddDays(-7), EndDate = DateTime.Now };
+            return await _ordersRepo.GetOrdersByDateRange(lastMonth, restaurantId);
+        }
     }
 }

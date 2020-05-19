@@ -132,6 +132,59 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         }
 
+        [HttpGet("history/range")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersInOrderDateRange([FromBody] DateRange dateRange)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var orders = await _orderService.GetOrdersByOrderDateRange(dateRange, restaurantId);
+
+            if (orders.Count() > 0)
+                return Ok(orders);
+            else
+                return NotFound(orders);
+
+        }
+
+        [HttpGet("history/lastMonth")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersFromLastMonth()
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var orders = await _orderService.GetOrdersFromLastMonth(restaurantId);
+
+            if (orders.Count() > 0)
+                return Ok(orders);
+            else
+                return NotFound(orders);
+
+        }
+
+
+        [HttpGet("history/lastWeek")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersFromLastWeek()
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User) && !_securityService.CheckIfInRole("COOK", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var orders = await _orderService.GetOrdersFromLastWeek(restaurantId);
+
+            if (orders.Count() > 0)
+                return Ok(orders);
+            else
+                return NotFound(orders);
+
+        }
+
+
         [HttpPost("products")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> AddProductsToOrder([FromBody] List<OrderedProducts> orderedProducts)

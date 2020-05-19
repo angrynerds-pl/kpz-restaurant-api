@@ -20,5 +20,9 @@ namespace KPZ_Restaurant_REST_API.Services
         Task<IEnumerable<Order>> GetOrdersByOrderDate(int year, int month, int day, int restaurantId);
         Task<IEnumerable<Order>> GetOrdersInProgress(int restaurantId);
         Task<Order> UpdateOrderStatus(int orderId, string status, int restaurantId);
+        Task<IEnumerable<Order>> GetOrdersByOrderDateRange(DateRange dateRange, int restaurantId);
+        Task<IEnumerable<Order>>  GetOrdersFromLastMonth(int restaurantId);
+        Task<IEnumerable<Order>>  GetOrdersFromLastWeek(int restaurantId);
+
     }
 }
