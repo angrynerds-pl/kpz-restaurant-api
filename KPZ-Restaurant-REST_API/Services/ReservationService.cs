@@ -23,9 +23,11 @@ namespace KPZ_Restaurant_REST_API.Services
             return newReservation;
         }
 
-        public async Task<Reservation> DeleteReservation(int reservationID)
+        public async Task<Reservation> DeleteReservation(int reservationID, int restaurantID)
         {
-            throw new NotImplementedException();
+            var reservation = await _reservationsRepo.DeleteReservationById(reservationID, restaurantID);
+            await _reservationsRepo.SaveAsync();
+            return reservation;
         }
 
         public async Task<IEnumerable<Reservation>> GetReservationsByDate(int year, int month, int day, int hours, int minutes, int restaurantId)
@@ -42,5 +44,7 @@ namespace KPZ_Restaurant_REST_API.Services
             var reservations = await _reservationsRepo.GetWhere(reservation => reservation.StartDate.Date == today && reservation.RestaurantId == restaurantId);
             return reservations;
         }
+
+
     }
 }

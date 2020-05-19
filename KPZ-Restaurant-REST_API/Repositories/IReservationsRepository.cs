@@ -8,5 +8,6 @@ namespace KPZ_Restaurant_REST_API.Repositories
 {
     public interface IReservationsRepository : IRestaurantGeneric<Reservation>
     {
+        Task<Reservation> DeleteReservationById(int id, int restaurantId);
     }
 }

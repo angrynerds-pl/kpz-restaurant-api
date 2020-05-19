@@ -13,6 +13,6 @@ namespace KPZ_Restaurant_REST_API.Services
 
         Task<IEnumerable<Reservation>> GetTodayReservations(int restaurantId);
 
-        Task<Reservation> DeleteReservation(int reservationID);
+        Task<Reservation> DeleteReservation(int reservationID, int restaurantId);
     }
 }
