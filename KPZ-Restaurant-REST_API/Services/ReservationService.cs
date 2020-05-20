@@ -45,6 +45,17 @@ namespace KPZ_Restaurant_REST_API.Services
             return reservations;
         }
 
+        public async Task<Reservation> UpdateReservation(Reservation res, int restaurantId)
+        {
+            res.RestaurantId = restaurantId;
+            var reservation = await _reservationsRepo.UpdateReservation(res);
+            if (reservation != null)
+            {
+                return reservation;
+            }
+            return null;
+        }
+
 
     }
 }

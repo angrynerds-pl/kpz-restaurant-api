@@ -77,5 +77,17 @@ namespace KPZ_Restaurant_REST_API.Controllers
             return Ok(reservation);
         }
 
+        [HttpPut]
+        [Authorize]
+        public async Task<ActionResult<Reservation>> UpdateReservation([FromBody]Reservation reservation)
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User)  && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var _reservation = _reservationService.UpdateReservation(reservation, restaurantId);
+            if (_reservation != null)
+                return Ok(_reservation);
+            return BadRequest(_reservation);
+        }
     }
 }
