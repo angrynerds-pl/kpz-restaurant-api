@@ -27,5 +27,24 @@ namespace KPZ_Restaurant_REST_API.Repositories
             }
             return null;
         }
+
+        public async Task<Reservation> UpdateReservation(Reservation reservation)
+        {
+            var entity = await _context.Reservations.FindAsync(reservation.Id);
+            if (entity != null)
+            {
+                entity.RestaurantId = reservation.RestaurantId;
+                entity.CustomerName = reservation.CustomerName;
+                entity.DeletedAt = reservation.DeletedAt;
+                entity.EndDate = entity.EndDate;
+                entity.NumberOfSeats = reservation.NumberOfSeats;
+                entity.StartDate = reservation.StartDate;
+                entity.TableId = reservation.TableId;
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            else
+                return null;
+        }
     }
 }
