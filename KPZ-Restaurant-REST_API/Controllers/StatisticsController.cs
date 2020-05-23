@@ -31,5 +31,28 @@ namespace KPZ_Restaurant_REST_API.Controllers
             return Ok(await _statisticsService.GetIncomeFromPast6Months(restaurantId));
         }
 
+        [HttpGet("best")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<SelledProduct>>> GetTop5SellingProducts()
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();   
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            return Ok(await _statisticsService.GetTop5SellingProducts(restaurantId));
+        }
+
+        [HttpGet("worst")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<SelledProduct>>> GetWorst5SellingProducts()
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();   
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            return Ok(await _statisticsService.GetWorst5SellingProducts(restaurantId));
+        }
+
+
     }
 }
