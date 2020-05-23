@@ -11,5 +11,6 @@ namespace KPZ_Restaurant_REST_API.Services
         Task<IEnumerable<ProductStatistics>> GetTop5SellingProducts(int restaurantId);
         Task<IEnumerable<ProductStatistics>> GetWorst5SellingProducts(int restaurantId);
         Task<IEnumerable<ProductStatistics>> GetAmountOfSoldProductsByCategory(int restaurantId);
+        Task<IEnumerable<CustomerTraffic>> GetCustomerTraffic(int restaurantId, string period, int startTime, int endTime);
     }
 }

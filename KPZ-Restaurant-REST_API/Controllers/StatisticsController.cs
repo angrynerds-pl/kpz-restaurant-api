@@ -65,5 +65,38 @@ namespace KPZ_Restaurant_REST_API.Controllers
         }
 
 
+        [HttpGet("customers/today/{startTime}/{endTime}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetTodaysCustomerTraffic(int startTime, int endTime)
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            return Ok(await _statisticsService.GetCustomerTraffic(restaurantId, "TODAY", startTime, endTime));
+        }
+
+        [HttpGet("customers/week/{startTime}/{endTime}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetWeeksCustomerTraffic(int startTime, int endTime)
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            return Ok(await _statisticsService.GetCustomerTraffic(restaurantId, "WEEK", startTime, endTime));
+        }
+
+        [HttpGet("customers/month/{startTime}/{endTime}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetMonthsCustomerTraffic(int startTime, int endTime)
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            return Ok(await _statisticsService.GetCustomerTraffic(restaurantId, "MONTH", startTime, endTime));
+        }
+
     }
 }

@@ -94,5 +94,40 @@ namespace KPZ_Restaurant_REST_API.Services
 
             return topSellingProducts.OrderBy(p => p.Quantity).Take(5).ToList();
         }
+
+        public async Task<IEnumerable<CustomerTraffic>> GetCustomerTraffic(int restaurantId, string period, int startTime, int endTime)
+        {
+            var customerTraffic = new List<CustomerTraffic>();
+            if (startTime > endTime || startTime + 2 > endTime)
+                return null;
+
+            var startTimeSpan = new TimeSpan(startTime, 0, 0);
+            var endTimeSpan = new TimeSpan(endTime, 0, 0);
+
+            int periodLength = 2;
+            int numberOfOrders = 0;
+            while (startTimeSpan < endTimeSpan)
+            {
+                if (startTimeSpan.Add(TimeSpan.FromHours(periodLength)) > endTimeSpan)
+                    periodLength = 1;
+
+                if (period == "TODAY")
+                    numberOfOrders = await _ordersRepo.GetNumberOfOrdersFromToday(restaurantId, startTimeSpan, startTimeSpan.Add(TimeSpan.FromHours(periodLength)));
+                else if (period == "WEEK")
+                    numberOfOrders = await _ordersRepo.GetNumberOfOrdersFromWeek(restaurantId, startTimeSpan, startTimeSpan.Add(TimeSpan.FromHours(periodLength)));
+                else if (period == "MONTH")
+                    numberOfOrders = await _ordersRepo.GetNumberOfOrdersFromMonth(restaurantId, startTimeSpan, startTimeSpan.Add(TimeSpan.FromHours(periodLength)));
+
+
+                customerTraffic.Add(new CustomerTraffic() { StartTime = startTimeSpan, EndTime = startTimeSpan.Add(TimeSpan.FromHours(periodLength)), Quantity = numberOfOrders });
+
+                if (periodLength != 1)
+                    startTimeSpan = startTimeSpan.Add(TimeSpan.FromHours(periodLength));
+                else
+                    startTimeSpan = endTimeSpan;
+            }
+
+            return customerTraffic;
+        }
     }
 }
