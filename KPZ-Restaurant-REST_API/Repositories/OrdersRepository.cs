@@ -55,7 +55,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<IEnumerable<Order>> GetOrdersForTable(int tableId, int restaurantId)
         {
-            return await _context.Orders.Where(o => o.TableId == tableId && o.Status == "IN_PROGRESS" && o.RestaurantId == restaurantId).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
+            return await _context.Orders.Where(o => o.TableId == tableId && (o.Status == "IN_PROGRESS" || o.Status == "SERVED")  && o.RestaurantId == restaurantId).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
 
         public async Task<IEnumerable<Order>> GetOrdersInProgress(int restaurantId)
