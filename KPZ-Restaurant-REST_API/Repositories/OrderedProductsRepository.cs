@@ -29,6 +29,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
                 return null;
         }
 
+
         public async Task<OrderedProducts> GetOrderedProductById(int id, int restaurantId)
         {
             return await _context.OrderedProducts.Where(o => o.Id == id && o.Order.RestaurantId == restaurantId).FirstOrDefaultAsync();
@@ -44,19 +45,22 @@ namespace KPZ_Restaurant_REST_API.Repositories
             return await _context.OrderedProducts.Where(o => o.OrderId == orderId && o.Order.RestaurantId == restaurantId && o.Status == "SERVED").Include(o => o.Product).ToListAsync();
         }
 
-        public async Task<IEnumerable<SelledProduct>> GetTopSellingProducts(int restaurantId)
+        public async Task<int> GetAmountOfSoldProductsByCategory(int restaurantId, string category)
         {
-            return await _context.OrderedProducts.Where(o => o.Order.RestaurantId == restaurantId)
-                .GroupBy(o => o.ProductId)
-                .Select(group => new SelledProduct { ProductName = _context.OrderedProducts.Where(p => p.Id == group.Key).FirstOrDefault().Product.Name, Quantity = group.Count() })
-                .OrderByDescending(o => o.Quantity).Take(5).ToListAsync();
+            return await _context.OrderedProducts.Where(o => o.Product.Category.Name == category && o.Product.RestaurantId == restaurantId)
+                .CountAsync();
         }
 
-        public async Task<IEnumerable<SelledProduct>> GetWorstSellingProducts(int restaurantId)
+        public async Task<int> GetSoldProductCount(int restaurantId, string productName)
+        {
+            return await _context.OrderedProducts.Where(o => o.Product.RestaurantId == restaurantId && o.Product.Name == productName).CountAsync();
+        }
+
+        public async Task<IEnumerable<ProductStatistics>> GetWorstSellingProducts(int restaurantId)
         {
             return await _context.OrderedProducts.Where(o => o.Order.RestaurantId == restaurantId)
                 .GroupBy(o => o.ProductId)
-                .Select(group => new SelledProduct { ProductName = _context.OrderedProducts.Where(p => p.Id == group.Key).FirstOrDefault().Product.Name, Quantity = group.Count() })
+                .Select(group => new ProductStatistics { Name = _context.OrderedProducts.Where(p => p.Id == group.Key).FirstOrDefault().Product.Name, Quantity = group.Count() })
                 .OrderBy(o => o.Quantity).Take(5).ToListAsync();
         }
 

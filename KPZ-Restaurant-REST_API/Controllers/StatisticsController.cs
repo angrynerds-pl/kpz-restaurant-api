@@ -16,7 +16,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         public StatisticsController(IStatisticsService statisticsService, ISecurityService securityService)
         {
-            _statisticsService = statisticsService;            
+            _statisticsService = statisticsService;
             _securityService = securityService;
         }
 
@@ -25,7 +25,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
         public async Task<ActionResult<IEnumerable<IncomeByMonth>>> GetIncomeFromPast6Months()
         {
             if (!_securityService.CheckIfInRole("MANAGER", User))
-                return Unauthorized();   
+                return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
             return Ok(await _statisticsService.GetIncomeFromPast6Months(restaurantId));
@@ -33,10 +33,10 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         [HttpGet("best")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<SelledProduct>>> GetTop5SellingProducts()
+        public async Task<ActionResult<IEnumerable<ProductStatistics>>> GetTop5SellingProducts()
         {
             if (!_securityService.CheckIfInRole("MANAGER", User))
-                return Unauthorized();   
+                return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
             return Ok(await _statisticsService.GetTop5SellingProducts(restaurantId));
@@ -44,13 +44,24 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         [HttpGet("worst")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<SelledProduct>>> GetWorst5SellingProducts()
+        public async Task<ActionResult<IEnumerable<ProductStatistics>>> GetWorst5SellingProducts()
         {
             if (!_securityService.CheckIfInRole("MANAGER", User))
-                return Unauthorized();   
+                return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
             return Ok(await _statisticsService.GetWorst5SellingProducts(restaurantId));
+        }
+
+        [HttpGet("categories")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<ProductStatistics>>> GetAmountOfSoldProductsByCategory()
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            return Ok(await _statisticsService.GetAmountOfSoldProductsByCategory(restaurantId));
         }
 
 
