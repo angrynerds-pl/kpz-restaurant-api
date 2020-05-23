@@ -33,7 +33,8 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
             product.CategoryId = category.Id;
 
-            return await _context.Set<Restaurant>().AnyAsync(r => r.Id == product.RestaurantId)
+            return ! (await _context.Products.AnyAsync(p => p.Name == product.Name && p.RestaurantId == p.RestaurantId))
+                && await _context.Set<Restaurant>().AnyAsync(r => r.Id == product.RestaurantId)
                 && await _context.Set<Category>().AnyAsync(c => c.Id == product.CategoryId)
                 && product.Price >= 0;
         }
