@@ -10,11 +10,14 @@ namespace KPZ_Restaurant_REST_API.Services
     public class StatisticsService : IStatisticsService
     {
         private IOrdersRepository _ordersRepo;
+        private IOrderedProductsRepository _orderedProductsRepo;
 
-        public StatisticsService(IOrdersRepository ordersRepo)
+        public StatisticsService(IOrdersRepository ordersRepo, IOrderedProductsRepository orderedProductsRepo)
         {
             _ordersRepo = ordersRepo;
+            _orderedProductsRepo = orderedProductsRepo;
         }
+
 
         public async Task<IEnumerable<IncomeByMonth>> GetIncomeFromPast6Months(int restaurantId)
         {
@@ -43,6 +46,16 @@ namespace KPZ_Restaurant_REST_API.Services
             }
 
             return incomeFromPast6Months;
+        }
+
+        public async Task<IEnumerable<SelledProduct>> GetTop5SellingProducts(int restaurantId)
+        {
+            return await _orderedProductsRepo.GetTopSellingProducts(restaurantId);
+        }
+
+        public async Task<IEnumerable<SelledProduct>> GetWorst5SellingProducts(int restaurantId)
+        {
+            return await _orderedProductsRepo.GetWorstSellingProducts(restaurantId);
         }
     }
 }
