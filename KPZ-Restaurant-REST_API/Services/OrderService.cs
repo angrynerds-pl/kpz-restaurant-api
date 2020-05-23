@@ -26,6 +26,7 @@ namespace KPZ_Restaurant_REST_API.Services
             {
                 await _ordersRepo.Add(newOrder);
                 await _ordersRepo.SaveAsync();
+
                 return newOrder;
             }
             else
@@ -124,7 +125,7 @@ namespace KPZ_Restaurant_REST_API.Services
                 if (orderedProductCorrect)
                 {
                     var updatedProduct = await _orderedProductsRepo.UpdateOrderedProduct(orderedProduct);
-                    if(updatedProduct != null)
+                    if (updatedProduct != null)
                         updatedProducts.Add(updatedProduct);
                 }
             }
@@ -155,7 +156,7 @@ namespace KPZ_Restaurant_REST_API.Services
 
         public async Task<Order> UpdateOrderStatus(int orderId, string status, int restaurantId)
         {
-            var statuses = new List<string>() {"PENDING", "PAID", "IN_PROGRESS", "SERVED"};
+            var statuses = new List<string>() { "PENDING", "PAID", "IN_PROGRESS", "SERVED" };
 
             var orderToUpdate = await _ordersRepo.GetOrderById(orderId, restaurantId);
             if (orderToUpdate != null && statuses.Contains(status))
@@ -185,5 +186,6 @@ namespace KPZ_Restaurant_REST_API.Services
             DateRange lastMonth = new DateRange() { StartDate = DateTime.Now.AddDays(-7), EndDate = DateTime.Now };
             return await _ordersRepo.GetOrdersByDateRange(lastMonth, restaurantId);
         }
+
     }
 }
