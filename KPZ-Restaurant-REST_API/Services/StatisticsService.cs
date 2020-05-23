@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using KPZ_Restaurant_REST_API.Models;
 using KPZ_Restaurant_REST_API.Repositories;
@@ -11,13 +12,44 @@ namespace KPZ_Restaurant_REST_API.Services
     {
         private IOrdersRepository _ordersRepo;
         private IOrderedProductsRepository _orderedProductsRepo;
+        private ICategoriesRepository _categoriesRepo;
+        private IProductsRepository _productsRepo;
 
-        public StatisticsService(IOrdersRepository ordersRepo, IOrderedProductsRepository orderedProductsRepo)
+        public StatisticsService(IOrdersRepository ordersRepo, IOrderedProductsRepository orderedProductsRepo, ICategoriesRepository categoriesRepo, IProductsRepository productsRepo)
         {
             _ordersRepo = ordersRepo;
             _orderedProductsRepo = orderedProductsRepo;
+            _categoriesRepo = categoriesRepo;
+            _productsRepo = productsRepo;
         }
 
+        public async Task<IEnumerable<ProductStatistics>> GetAmountOfSoldProductsByCategory(int restaurantId)
+        {
+            var soldProducts = new List<ProductStatistics>();
+            var categories = await _categoriesRepo.GetAllCategories(restaurantId);
+
+            foreach (var category in categories)
+            {
+                var productQuant = new ProductStatistics() { Name = category.Name, Quantity = await _orderedProductsRepo.GetAmountOfSoldProductsByCategory(restaurantId, category.Name) };
+                soldProducts.Add(productQuant);
+            }
+
+            return soldProducts;
+        }
+
+        public async Task<IEnumerable<ProductStatistics>> GetTop5SellingProducts(int restaurantId)
+        {
+            var topSellingProducts = new List<ProductStatistics>();
+            var productNames = await _productsRepo.GetAllProducts(restaurantId);
+
+            foreach (var product in productNames)
+            {
+                var productQuant = new ProductStatistics() { Name = product.Name, Quantity = await _orderedProductsRepo.GetSoldProductCount(restaurantId, product.Name) };
+                topSellingProducts.Add(productQuant);
+            }
+
+            return topSellingProducts.OrderByDescending(p => p.Quantity).Take(5).ToList();
+        }
 
         public async Task<IEnumerable<IncomeByMonth>> GetIncomeFromPast6Months(int restaurantId)
         {
@@ -48,14 +80,19 @@ namespace KPZ_Restaurant_REST_API.Services
             return incomeFromPast6Months;
         }
 
-        public async Task<IEnumerable<SelledProduct>> GetTop5SellingProducts(int restaurantId)
-        {
-            return await _orderedProductsRepo.GetTopSellingProducts(restaurantId);
-        }
 
-        public async Task<IEnumerable<SelledProduct>> GetWorst5SellingProducts(int restaurantId)
+        public async Task<IEnumerable<ProductStatistics>> GetWorst5SellingProducts(int restaurantId)
         {
-            return await _orderedProductsRepo.GetWorstSellingProducts(restaurantId);
+            var topSellingProducts = new List<ProductStatistics>();
+            var productNames = await _productsRepo.GetAllProducts(restaurantId);
+
+            foreach (var product in productNames)
+            {
+                var productQuant = new ProductStatistics() { Name = product.Name, Quantity = await _orderedProductsRepo.GetSoldProductCount(restaurantId, product.Name) };
+                topSellingProducts.Add(productQuant);
+            }
+
+            return topSellingProducts.OrderBy(p => p.Quantity).Take(5).ToList();
         }
     }
 }

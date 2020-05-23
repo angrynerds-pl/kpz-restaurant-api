@@ -1,8 +1,8 @@
 namespace KPZ_Restaurant_REST_API.Models
 {
-    public class SelledProduct
+    public class ProductStatistics
     {
-        public string ProductName { get; set; }
+        public string Name { get; set; }
         public int Quantity { get; set; }
     }
 }
