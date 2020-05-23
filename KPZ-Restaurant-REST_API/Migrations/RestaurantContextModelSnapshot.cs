@@ -42,29 +42,6 @@ namespace KPZ_Restaurant_REST_API.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.IncomeByMonth", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Income")
-                        .HasColumnType("decimal(9, 2)");
-
-                    b.Property<string>("Month")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RestaurantId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.ToTable("IncomeByMonth");
-                });
-
             modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -315,15 +292,6 @@ namespace KPZ_Restaurant_REST_API.Migrations
                 });
 
             modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.Category", b =>
-                {
-                    b.HasOne("KPZ_Restaurant_REST_API.Models.Restaurant", "Restaurant")
-                        .WithMany()
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KPZ_Restaurant_REST_API.Models.IncomeByMonth", b =>
                 {
                     b.HasOne("KPZ_Restaurant_REST_API.Models.Restaurant", "Restaurant")
                         .WithMany()
