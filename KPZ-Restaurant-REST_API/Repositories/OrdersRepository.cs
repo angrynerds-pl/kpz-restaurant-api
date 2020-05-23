@@ -22,6 +22,22 @@ namespace KPZ_Restaurant_REST_API.Repositories
             return await _context.Set<Order>().Where(o => o.RestaurantId == restaurantId).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
 
+        public async Task<int> GetNumberOfOrdersFromToday(int restaurantId, TimeSpan startTimeSpan, TimeSpan timeSpan)
+        {
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date == DateTime.Now.Date && o.OrderDate.TimeOfDay >= startTimeSpan && o.OrderDate.TimeOfDay < timeSpan).CountAsync();
+        }
+
+        public async Task<int> GetNumberOfOrdersFromWeek(int restaurantId, TimeSpan startTimeSpan, TimeSpan timeSpan)
+        {
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date <= DateTime.Now.Date && o.OrderDate.Date >= DateTime.Now.AddDays(-7).Date && o.OrderDate.TimeOfDay >= startTimeSpan && o.OrderDate.TimeOfDay < timeSpan).CountAsync();
+        }
+
+        public async Task<int> GetNumberOfOrdersFromMonth(int restaurantId, TimeSpan startTimeSpan, TimeSpan timeSpan)
+        {
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date <= DateTime.Now.Date && o.OrderDate.Date >= DateTime.Now.AddMonths(-1).Date && o.OrderDate.TimeOfDay >= startTimeSpan && o.OrderDate.TimeOfDay < timeSpan).CountAsync();
+        }
+
+
         public async Task<Order> GetOrderById(int orderId, int restaurantId)
         {
             return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.Id == orderId).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).FirstOrDefaultAsync();
