@@ -60,7 +60,6 @@ namespace KPZ_Restaurant_REST_API
             services.AddScoped<IRoomsRepository, RoomsRepository>();
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IOrderedProductsRepository, OrderedProductsRepository>();
-            services.AddScoped<IIncomeByMonthRepository, IncomeByMonthRepository>();
             services.AddScoped<IStatisticsService, StatisticsService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();

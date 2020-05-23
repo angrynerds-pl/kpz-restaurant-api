@@ -40,8 +40,5 @@ namespace KPZ_Restaurant_REST_API.Models
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Room> Rooms { get; set; }
 
-        //STATISTICS 
-        public DbSet<IncomeByMonth> IncomeByMonth { get; set; }
-
     }
 }
