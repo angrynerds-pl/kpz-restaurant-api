@@ -85,5 +85,16 @@ namespace KPZ_Restaurant_REST_API.Repositories
             else
                 return null;
         }
+
+        public async Task<int> GetSoldProductCountFromTimePeriod(int restaurantId, string productName, DateTime startDateTime, DateTime endDateTime)
+        {
+            return await _context.OrderedProducts.Where(o => o.Product.RestaurantId == restaurantId && o.Order.OrderDate.Date >= startDateTime.Date && o.Order.OrderDate.Date <= endDateTime.Date && o.Product.Name == productName).CountAsync();
+        }
+
+        public async Task<int> GetAmountOfSoldProductsByCategory(int restaurantId, string category, DateTime startDateTime, DateTime endDateTime)
+        {
+            return await _context.OrderedProducts.Where(o => o.Product.Category.Name == category && o.Order.OrderDate.Date >= startDateTime.Date && o.Order.OrderDate.Date <= endDateTime.Date && o.Product.RestaurantId == restaurantId)
+                   .CountAsync();
+        }
     }
 }

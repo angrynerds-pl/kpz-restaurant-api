@@ -129,5 +129,56 @@ namespace KPZ_Restaurant_REST_API.Services
 
             return customerTraffic;
         }
+
+        public async Task<IEnumerable<ProductStatistics>> GetTop5SellingProductsFromTimePeriod(string startDate, string endDate, int restaurantId)
+        {
+            var topSellingProducts = new List<ProductStatistics>();
+            var productNames = await _productsRepo.GetAllProducts(restaurantId);
+            DateTime startDateTime, endDateTime;
+            if (!(DateTime.TryParse(startDate, out startDateTime) && DateTime.TryParse(endDate, out endDateTime)))
+                return null;
+
+            foreach (var product in productNames)
+            {
+                var productQuant = new ProductStatistics() { Name = product.Name, Quantity = await _orderedProductsRepo.GetSoldProductCountFromTimePeriod(restaurantId, product.Name, startDateTime, endDateTime) };
+                topSellingProducts.Add(productQuant);
+            }
+
+            return topSellingProducts.OrderByDescending(p => p.Quantity).Take(5).ToList();
+        }
+
+        public async Task<IEnumerable<ProductStatistics>> GetWorst5SellingProductsFromTimePeriod(string startDate, string endDate, int restaurantId)
+        {
+            var topSellingProducts = new List<ProductStatistics>();
+            var productNames = await _productsRepo.GetAllProducts(restaurantId);
+            DateTime startDateTime, endDateTime;
+            if (!(DateTime.TryParse(startDate, out startDateTime) && DateTime.TryParse(endDate, out endDateTime)))
+                return null;
+
+            foreach (var product in productNames)
+            {
+                var productQuant = new ProductStatistics() { Name = product.Name, Quantity = await _orderedProductsRepo.GetSoldProductCountFromTimePeriod(restaurantId, product.Name, startDateTime, endDateTime) };
+                topSellingProducts.Add(productQuant);
+            }
+
+            return topSellingProducts.OrderBy(p => p.Quantity).Take(5).ToList();
+        }
+
+        public async Task<IEnumerable<ProductStatistics>> GetAmountOfSoldProductsByCategoryFromTimePeriod(string startDate, string endDate, int restaurantId)
+        {
+            var soldProducts = new List<ProductStatistics>();
+            var categories = await _categoriesRepo.GetAllCategories(restaurantId);
+            DateTime startDateTime, endDateTime;
+            if (!(DateTime.TryParse(startDate, out startDateTime) && DateTime.TryParse(endDate, out endDateTime)))
+                return null;
+
+            foreach (var category in categories)
+            {
+                var productQuant = new ProductStatistics() { Name = category.Name, Quantity = await _orderedProductsRepo.GetAmountOfSoldProductsByCategory(restaurantId, category.Name, startDateTime, endDateTime) };
+                soldProducts.Add(productQuant);
+            }
+
+            return soldProducts;
+        }
     }
 }
