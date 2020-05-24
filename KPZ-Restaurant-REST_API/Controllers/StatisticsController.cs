@@ -22,13 +22,25 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         [HttpGet("income")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<IncomeByMonth>>> GetIncomeFromPast6Months([FromQuery(Name="startDate")] string startDate, [FromQuery(Name="endDate")] string endDate)
+        public async Task<ActionResult<IEnumerable<IncomeByMonth>>> GetIncomeFromPast6Months()
         {
             if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
 
             var restaurantId = _securityService.GetRestaurantId(User);
             return Ok(await _statisticsService.GetIncomeFromPast6Months(restaurantId));
+        }
+
+        [HttpGet("income/range")]
+        [Authorize]
+        public async Task<ActionResult> GetIncomeFromDatERange([FromQuery(Name="startDate")] string startDate, [FromQuery(Name="endDate")] string endDate)
+        {
+            if (!_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var summarizedIncome = await _statisticsService.GetIncomeFromDateRange(restaurantId, startDate, endDate);
+            return Ok( new {income = summarizedIncome});
         }
 
         [HttpGet("best")]
