@@ -100,7 +100,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         [HttpGet("customers/today")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetTodaysCustomerTraffic([FromQuery(Name="startTime")] int startTime, [FromQuery(Name="startTime")]  int endTime)
+        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetTodaysCustomerTraffic([FromQuery(Name="startTime")] int startTime, [FromQuery(Name="endTime")]  int endTime)
         {
             if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
@@ -111,7 +111,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         [HttpGet("customers/week")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetWeeksCustomerTraffic([FromQuery(Name="startTime")] int startTime, [FromQuery(Name="startTime")]  int endTime)
+        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetWeeksCustomerTraffic([FromQuery(Name="startTime")] int startTime, [FromQuery(Name="endTime")]  int endTime)
         {
             if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
@@ -122,7 +122,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         [HttpGet("customers/month")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetMonthsCustomerTraffic([FromQuery(Name="startTime")] int startTime, [FromQuery(Name="startTime")]  int endTime)
+        public async Task<ActionResult<IEnumerable<CustomerTraffic>>> GetMonthsCustomerTraffic([FromQuery(Name="startTime")] int startTime, [FromQuery(Name="endTime")]  int endTime)
         {
             if (!_securityService.CheckIfInRole("MANAGER", User))
                 return Unauthorized();
