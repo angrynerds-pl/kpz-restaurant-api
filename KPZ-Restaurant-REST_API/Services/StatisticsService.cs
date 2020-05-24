@@ -72,6 +72,11 @@ namespace KPZ_Restaurant_REST_API.Services
                         foreach (var product in order.OrderedProducts)
                             income.Income += product.Product.Price;
                     }
+                    else
+                    {
+                        if (order.OrderedProducts == null)
+                            Console.WriteLine("OrderedProducts null");
+                    }
                 }
 
                 incomeFromPast6Months.Add(income);
@@ -80,6 +85,30 @@ namespace KPZ_Restaurant_REST_API.Services
             return incomeFromPast6Months;
         }
 
+
+        public async Task<decimal?> GetIncomeFromDateRange(int restaurantId, string startDate, string endDate)
+        {
+            var incomeFromPast6Months = new List<IncomeByMonth>();
+
+            DateTime startDateTime, endDateTime;
+            if (!(DateTime.TryParse(startDate, out startDateTime) && DateTime.TryParse(endDate, out endDateTime)))
+                return null;
+
+            var dateRange = new DateRange() { StartDate = startDateTime, EndDate = endDateTime };
+            var ordersFromMonth = await _ordersRepo.GetOrdersByDateRange(dateRange, restaurantId);
+
+            var income = 0M;
+            foreach (var order in ordersFromMonth)
+            {
+                if (order.OrderedProducts != null && order.Status == "PAID")
+                {
+                    foreach (var product in order.OrderedProducts)
+                        income += product.Product.Price;
+                }
+            }
+
+            return income;
+        }
 
         public async Task<IEnumerable<ProductStatistics>> GetWorst5SellingProducts(int restaurantId)
         {

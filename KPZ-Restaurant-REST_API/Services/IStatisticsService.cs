@@ -8,6 +8,7 @@ namespace KPZ_Restaurant_REST_API.Services
     public interface IStatisticsService
     {
         Task<IEnumerable<IncomeByMonth>> GetIncomeFromPast6Months(int restaurantId);
+        Task<decimal?> GetIncomeFromDateRange(int restaurantId, string startDate, string endDate);
         Task<IEnumerable<ProductStatistics>> GetTop5SellingProducts(int restaurantId);
         Task<IEnumerable<ProductStatistics>> GetTop5SellingProductsFromTimePeriod(string startDate, string endDate, int restaurantId);
         Task<IEnumerable<ProductStatistics>> GetWorst5SellingProducts(int restaurantId);
