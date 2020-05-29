@@ -14,5 +14,9 @@ namespace KPZ_Restaurant_REST_API.Repositories
         Task<OrderedProducts> DeleteOrderedProductById(int orderedProductId, int restaurantId);
         Task<OrderedProducts> GetOrderedProductById(int id, int restaurantId);
         Task<IList<OrderedProducts>> GetServedProducts(int orderId, int restaurantId);
+        Task<int> GetAmountOfSoldProductsByCategory(int restaurantId, string category);
+        Task<int> GetAmountOfSoldProductsByCategory(int restaurantId, string category, DateTime startDate, DateTime endDate);
+        Task<int> GetSoldProductCount(int restaurantId, string productName);
+        Task<int> GetSoldProductCountFromTimePeriod(int restaurantId, string name, DateTime startDateTime, DateTime endDateTime);
     }
 }
