@@ -42,7 +42,8 @@ namespace KPZ_Restaurant_REST_API.Models
             if (!context.Rooms.Any())
             {
                 context.Rooms.AddRange(
-                   new Room() { RestaurantId = mcdonalds.Id, Restaurant = context.Restaurants.FirstOrDefault(), Name = "Floor 1", Rows = 5, Columns = 4 }
+                   new Room() { RestaurantId = mcdonalds.Id, Restaurant = context.Restaurants.FirstOrDefault(), Name = "Floor 1", Rows = 5, Columns = 4 },
+                   new Room() { RestaurantId = mcdonalds.Id, Restaurant = context.Restaurants.FirstOrDefault(), Name = "Floor 2", Rows = 4, Columns = 3 }
                );
                 context.SaveChanges();
             }
@@ -140,6 +141,42 @@ namespace KPZ_Restaurant_REST_API.Models
                        RoomId = context.Rooms.FirstOrDefault().Id,
                        X = 4,
                        Y = 3
+                   },
+                   new Table()
+                   {
+                       Number = 11,
+                       Seats = 4,
+                       Status = "FREE",
+                       RoomId = context.Rooms.Where(r => r.Id == 2).FirstOrDefault().Id,
+                       X = 0,
+                       Y = 0
+                   },
+                   new Table()
+                   {
+                       Number = 12,
+                       Seats = 3,
+                       Status = "FREE",
+                       RoomId = context.Rooms.Where(r => r.Id == 2).FirstOrDefault().Id,
+                       X = 1,
+                       Y = 0
+                   },
+                   new Table()
+                   {
+                       Number = 13,
+                       Seats = 4,
+                       Status = "FREE",
+                       RoomId = context.Rooms.Where(r => r.Id == 2).FirstOrDefault().Id,
+                       X = 2,
+                       Y = 0
+                   },
+                   new Table()
+                   {
+                       Number = 14,
+                       Seats = 4,
+                       Status = "FREE",
+                       RoomId = context.Rooms.Where(r => r.Id == 2).FirstOrDefault().Id,
+                       X = 2,
+                       Y = 1
                    }
                );
                 context.SaveChanges();
@@ -206,10 +243,10 @@ namespace KPZ_Restaurant_REST_API.Models
                 //Seed data
                 Console.WriteLine("Adding data to User table");
                 context.Users.AddRange(
-                   new User() { FirstName = "Janusz", LastName = "Biernat", Username = "jbiernat", Password = PasswordHasher.HashPassword("architektura"), Rights = UserType.MANAGER, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Dariusz", LastName = "Caban", Username = "dcaban", Password = PasswordHasher.HashPassword("łyndołs"), Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Jacek", LastName = "Mazurkiewicz", Username = "jmazur", Password = PasswordHasher.HashPassword("mikrokontroler"), Rights = UserType.COOK, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Piotr", LastName = "Patronik", Username = "pepe", Password = PasswordHasher.HashPassword("przepis"), Rights = UserType.HEAD_WAITER, RestaurantId = mcdonalds.Id }
+                   new User() { FirstName = "Jarosław", LastName = "Kaczyński", Username = "kaczynski", Password = PasswordHasher.HashPassword("prezes"), Rights = UserType.MANAGER, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Zbigniew", LastName = "Ziobro", Username = "ziobro", Password = PasswordHasher.HashPassword("wolnesądy"), Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Andrzej", LastName = "Duda", Username = "duda", Password = PasswordHasher.HashPassword("adrianek"), Rights = UserType.COOK, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Mateusz", LastName = "Morawiecki", Username = "morawiecki", Password = PasswordHasher.HashPassword("500+"), Rights = UserType.HEAD_WAITER, RestaurantId = mcdonalds.Id }
                );
 
                 context.SaveChanges();
@@ -221,7 +258,7 @@ namespace KPZ_Restaurant_REST_API.Models
                     new Order()
                     {
                         RestaurantId = mcdonalds.Id,
-                        TableId = context.Tables.Find(1).Id,
+                        TableId = context.Tables.Find(2).Id,
                         WaiterId = context.Users.FirstOrDefault(w => w.Rights == UserType.WAITER).Id,
                         OrderDate = DateTime.Now,
                         Note = "na szybko",
