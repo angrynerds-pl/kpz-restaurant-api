@@ -154,22 +154,26 @@ namespace KPZ_Restaurant_REST_API.Models
                     new Category()
                     {
                         RestaurantId = mcdonalds.Id,
-                        Name = "BURGERS"
+                        Name = "BURGERS",
+                        ImagePath = "burgers.png"
                     },
                      new Category()
                      {
                          RestaurantId = mcdonalds.Id,
-                         Name = "WRAPS"
+                         Name = "WRAPS",
+                         ImagePath = "wraps.png"
                      },
                      new Category()
                      {
                          RestaurantId = mcdonalds.Id,
-                         Name = "FRIES"
+                         Name = "FRIES",
+                         ImagePath = "fries.png"
                      },
                      new Category()
                      {
                          RestaurantId = mcdonalds.Id,
-                         Name = "SALADS"
+                         Name = "SALADS",
+                         ImagePath = "salads.png"
                      }
                );
                 context.SaveChanges();

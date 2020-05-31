@@ -9,11 +9,12 @@ namespace KPZ_Restaurant_REST_API.Models
     {
         [Key]
         public int Id { get; set; }
-        public int RestaurantId {get; set;}
-        
+        public int RestaurantId { get; set; }
+
         [ForeignKey("RestaurantId")]
         public virtual Restaurant Restaurant { get; set; }
         public string Name { get; set; }
+        public string ImagePath { get; set; }
         public DateTime? DeletedAt { get; set; }
 
     }

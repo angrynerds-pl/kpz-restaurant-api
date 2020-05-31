@@ -18,7 +18,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<bool> CategoryCorrect(Category category)
         {
-            return (! await _context.Categories.AnyAsync(c => c.Name == category.Name && c.RestaurantId == category.RestaurantId && c.DeletedAt != null)) 
+            return (! await _context.Categories.AnyAsync(c => c.Name == category.Name && c.RestaurantId == category.RestaurantId)) 
             && ( await _context.Restaurants.AnyAsync(r => r.Id == category.RestaurantId));
         }
 
