@@ -243,10 +243,10 @@ namespace KPZ_Restaurant_REST_API.Models
                 //Seed data
                 Console.WriteLine("Adding data to User table");
                 context.Users.AddRange(
-                   new User() { FirstName = "Jarosław", LastName = "Kaczyński", Username = "kaczynski", Password = PasswordHasher.HashPassword("prezes"), Rights = UserType.MANAGER, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Zbigniew", LastName = "Ziobro", Username = "ziobro", Password = PasswordHasher.HashPassword("wolnesądy"), Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Andrzej", LastName = "Duda", Username = "duda", Password = PasswordHasher.HashPassword("adrianek"), Rights = UserType.COOK, RestaurantId = mcdonalds.Id },
-                   new User() { FirstName = "Mateusz", LastName = "Morawiecki", Username = "morawiecki", Password = PasswordHasher.HashPassword("500+"), Rights = UserType.HEAD_WAITER, RestaurantId = mcdonalds.Id }
+                   new User() { FirstName = "Jan", LastName = "Kowalski", Username = "jkowalski", Password = PasswordHasher.HashPassword("kowalski"), Rights = UserType.MANAGER, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Andrzej", LastName = "Nowak", Username = "anowak", Password = PasswordHasher.HashPassword("nowak"), Rights = UserType.WAITER, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Jacek", LastName = "Kulczyk", Username = "jkulczyk", Password = PasswordHasher.HashPassword("kulczyk"), Rights = UserType.COOK, RestaurantId = mcdonalds.Id },
+                   new User() { FirstName = "Dariusz", LastName = "Mariusz", Username = "dmariusz", Password = PasswordHasher.HashPassword("mariusz"), Rights = UserType.HEAD_WAITER, RestaurantId = mcdonalds.Id }
                );
 
                 context.SaveChanges();
