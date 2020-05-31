@@ -19,33 +19,54 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<IEnumerable<Order>> GetAllOrders(int restaurantId)
         {
-            return await _context.Set<Order>().Where(o => o.RestaurantId == restaurantId ).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
+            return await _context.Set<Order>().Where(o => o.RestaurantId == restaurantId).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
+
+        public async Task<int> GetNumberOfOrdersFromToday(int restaurantId, TimeSpan startTimeSpan, TimeSpan timeSpan)
+        {
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date == DateTime.Now.Date && o.OrderDate.TimeOfDay >= startTimeSpan && o.OrderDate.TimeOfDay < timeSpan).CountAsync();
+        }
+
+        public async Task<int> GetNumberOfOrdersFromWeek(int restaurantId, TimeSpan startTimeSpan, TimeSpan timeSpan)
+        {
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date <= DateTime.Now.Date && o.OrderDate.Date >= DateTime.Now.AddDays(-7).Date && o.OrderDate.TimeOfDay >= startTimeSpan && o.OrderDate.TimeOfDay < timeSpan).CountAsync();
+        }
+
+        public async Task<int> GetNumberOfOrdersFromMonth(int restaurantId, TimeSpan startTimeSpan, TimeSpan timeSpan)
+        {
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date <= DateTime.Now.Date && o.OrderDate.Date >= DateTime.Now.AddMonths(-1).Date && o.OrderDate.TimeOfDay >= startTimeSpan && o.OrderDate.TimeOfDay < timeSpan).CountAsync();
+        }
+
 
         public async Task<Order> GetOrderById(int orderId, int restaurantId)
         {
-            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.Id == orderId ).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).FirstOrDefaultAsync();
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.Id == orderId).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Order>> GetOrdersByDate(DateTime serachedDate, int restaurantId)
         {
-            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date == serachedDate.Date ).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date == serachedDate.Date).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByDateRange(DateRange dateRange, int restaurantId)
+        {
+            return await _context.Orders.Where(o => o.RestaurantId == restaurantId && o.OrderDate.Date >= dateRange.StartDate.Date && o.OrderDate.Date <= dateRange.EndDate.Date).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
 
         public async Task<IEnumerable<Order>> GetOrdersForTable(int tableId, int restaurantId)
         {
-            return await _context.Orders.Where(o => o.TableId == tableId && o.Status == "IN_PROGRESS" && o.RestaurantId == restaurantId ).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
+            return await _context.Orders.Where(o => o.TableId == tableId && (o.Status == "IN_PROGRESS" || o.Status == "SERVED")  && o.RestaurantId == restaurantId).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
 
         public async Task<IEnumerable<Order>> GetOrdersInProgress(int restaurantId)
         {
-            return await _context.Orders.Where(o => o.Status == "IN_PROGRESS" && o.RestaurantId == restaurantId ).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
+            return await _context.Orders.Where(o => o.Status == "IN_PROGRESS" && o.RestaurantId == restaurantId).Include(o => o.OrderedProducts).ThenInclude(p => p.Product).ToListAsync();
         }
 
         public async Task<bool> OrderCorrect(Order order)
         {
-            return await _context.Set<Table>().AnyAsync(t => t.Id == order.TableId )
-                && await _context.Set<User>().AnyAsync(w => w.Id == order.WaiterId )
+            return await _context.Set<Table>().AnyAsync(t => t.Id == order.TableId)
+                && await _context.Set<User>().AnyAsync(w => w.Id == order.WaiterId)
                 && await _context.Set<Restaurant>().AnyAsync(r => r.Id == order.RestaurantId);
         }
 
