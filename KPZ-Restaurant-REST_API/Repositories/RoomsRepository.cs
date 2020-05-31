@@ -36,7 +36,8 @@ namespace KPZ_Restaurant_REST_API.Repositories
 
         public async Task<bool> RoomCorrect(Room room)
         {
-            return await _context.Set<Restaurant>().AnyAsync(r => r.Id == room.RestaurantId);
+            return await _context.Set<Restaurant>().AnyAsync(r => r.Id == room.RestaurantId)
+                && !(await _context.Rooms.AnyAsync(r => r.Name == room.Name && r.RestaurantId == room.RestaurantId));
         }
 
     }
