@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using KPZ_Restaurant_REST_API.Models;
 using KPZ_Restaurant_REST_API.Repositories;
@@ -9,11 +10,13 @@ namespace KPZ_Restaurant_REST_API.Services
 {
     public class TableService : ITableService
     {
+        private IOrdersRepository _ordersRepository;
         private ITablesRepository _tablesRepository;
 
-        public TableService(ITablesRepository tablesRepository)
+        public TableService(ITablesRepository tablesRepository, IOrdersRepository ordersRepository)
         {
             _tablesRepository = tablesRepository;
+            _ordersRepository = ordersRepository;
         }
 
         public async Task<IEnumerable<Table>> AddManyTables(List<Table> tables, int restaurantId)
@@ -95,6 +98,23 @@ namespace KPZ_Restaurant_REST_API.Services
             }
             else
                 return null;
+        }
+
+        public async Task<IEnumerable<Table>> GetTablesWithReadyProducts(int restaurantId)
+        {
+            var ordersInProgress = await _ordersRepository.GetOrdersInProgress(restaurantId);
+            var tables = new List<Table>();
+
+            foreach(var order in ordersInProgress)
+            {
+                if (order.OrderedProducts.Any(o => o.Status.ToUpper() == "READY"))
+                {
+                    if(!tables.Any(t => t.Id == order.TableId))
+                        tables.Add(await _tablesRepository.GetTableById(order.TableId, restaurantId));
+                }
+            }
+
+            return tables;
         }
 
         public async Task<IEnumerable<Table>> UpdateManyTables(List<Table> tables, int restaurantId)

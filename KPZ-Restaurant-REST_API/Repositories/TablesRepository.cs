@@ -53,7 +53,7 @@ namespace KPZ_Restaurant_REST_API.Repositories
         {
             return await _context.Tables.Where(t => t.RoomId == roomId && t.Room.RestaurantId == restaurantId ).ToListAsync();
         }
-
+        
         public async Task<bool> TableCorrect(Table table, int restaurantId)
         {
             return await _context.Rooms.AnyAsync(r => r.Id == table.RoomId && r.RestaurantId == restaurantId ); 

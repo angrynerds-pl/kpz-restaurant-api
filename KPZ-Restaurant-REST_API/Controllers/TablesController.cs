@@ -71,6 +71,23 @@ namespace KPZ_Restaurant_REST_API.Controllers
                 return NotFound(tables);
         }
 
+        [HttpGet("ready")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Table>>> GetTablesWithReadyProducts()
+        {
+            if (!_securityService.CheckIfInRole("HEAD_WAITER", User) && !_securityService.CheckIfInRole("WAITER", User) && !_securityService.CheckIfInRole("MANAGER", User))
+                return Unauthorized();
+
+            var restaurantId = _securityService.GetRestaurantId(User);
+            var tables = await _tableService.GetTablesWithReadyProducts(restaurantId);
+
+            if(tables != null)
+                return Ok(tables);
+            else
+                return NotFound(tables);
+
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<Table>> AddTable([FromBody] Table table)

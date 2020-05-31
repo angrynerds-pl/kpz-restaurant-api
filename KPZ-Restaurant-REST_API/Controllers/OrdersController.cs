@@ -66,6 +66,7 @@ namespace KPZ_Restaurant_REST_API.Controllers
 
         }
 
+
         [HttpGet("products/{orderId}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderedProducts>>> GetOrderedProducts(int orderId)

@@ -66,7 +66,6 @@ namespace KPZ_Restaurant_REST_API.Controllers
             return Ok(products);
         }
 
-
         [HttpPost("categories")]
         [Authorize]
         public async Task<ActionResult<Category>> CreateNewCategory([FromBody] Category category)

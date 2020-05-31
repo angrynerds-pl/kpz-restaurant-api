@@ -311,7 +311,7 @@ namespace KPZ_Restaurant_REST_API.Models
                       {
                           OrderId = 1,
                           ProductId = context.Products.FirstOrDefault(p => p.Name == "Hamburger").Id,
-                          Status = "PAID"
+                          Status = "READY"
                       },
                       new OrderedProducts()
                       {
