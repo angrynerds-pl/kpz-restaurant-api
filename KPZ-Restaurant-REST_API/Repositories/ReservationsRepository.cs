@@ -40,6 +40,8 @@ namespace KPZ_Restaurant_REST_API.Repositories
                 entity.NumberOfSeats = reservation.NumberOfSeats;
                 entity.StartDate = reservation.StartDate;
                 entity.TableId = reservation.TableId;
+                entity.Note = reservation.Note;
+                _context.Update(entity);
                 await _context.SaveChangesAsync();
                 return entity;
             }
